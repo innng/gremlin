@@ -4,32 +4,30 @@
 
 1. https://machinelearningmastery.com/how-to-run-your-first-classifier-in-weka/
 
-## Anota√ß√µes
+## AnotaÁıes
 
 * **ITENS PARA COLOCAR NO GGP:**
-    * gram√°tica por regress√£o simb√≥lica
-    * esp√©cies
+    * gram·tica por regress„o simbÛlica
+    * espÈcies
     * fitness sharing
-    * co-evolu√ß√£o (cooperativa ou competitiva)
+    * co-evoluÁ„o (cooperativa ou competitiva)
 
-* **INTEGRA√á√ÉO WEKA-EPOCHX:**
-    * descobrir extens√£o x integra√ß√£o
+* **INTEGRA«√O WEKA-EPOCHX:**
+    * descobrir extens„o x integraÁ„o
     * weka biblioteca?
 
 ## Weka
 
-1. Extens√£o do epochx com weka provavelmente por command-line
+	*  
 
 ## Auto-Weka
 
-1. J√° seleciona melhor classificador e roda
+	* 
 
 ## Epochx
 
-1.
+	* 
 
-## D√∫vidas
+## D˙vidass
 
-1. A diferen√ßa do auto weka pro recipe, tpot e o outro √© s√≥ biblioteca?
-    * N√£o √© vi√°vel integrar as duas bibliotecas?
-2. Diferen√ßa do autoweka pro meu √© s√≥ ggp
+	* qual tipo de gram·tica seria melhor?

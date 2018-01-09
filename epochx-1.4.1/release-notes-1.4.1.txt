@@ -1,0 +1,9 @@
+EpochX: genetic programming software for research
+2011.06.17 Version 1.4.1 LGPL
+-------------------------------------------------
+
+Backwards compatible: Yes
+(*non-backwards changes marked with an asterisk)
+
+BUGFIX:  Common | EpoxParser parsed whole number double literals as longs.
+FEATURE: XGP    | Added method to clear a GPCandidateProgram's fitness cache.
