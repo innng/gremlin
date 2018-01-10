@@ -10,6 +10,12 @@
 * https://www.researchgate.net/publication/216300961_Symbolic_regression_using_abstract_expression_grammars
 * http://radio.feld.cvut.cz/conf/poster2015/proceedings/Section_ICS/ICS_084_Zegklitz.pdf
 * http://adsabs.harvard.edu/abs/2011gptp.book..109K
+* https://www.lri.fr/~hansen/proceedings/2014/GECCO/companion/posters/p139.pdf
+* https://www.cs.kent.ac.uk/pubs/2012/3212/content.pdf
+* https://weka.waikato.ac.nz/explorer
+* https://www.cs.waikato.ac.nz/ml/weka/mooc/dataminingwithweka/
+* https://www.cs.waikato.ac.nz/ml/weka/mooc/moredataminingwithweka/
+* https://dillinger.io/
 
 
 ## Anotações
