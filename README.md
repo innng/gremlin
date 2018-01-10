@@ -2,7 +2,15 @@
 
 ## Links
 
-1. https://machinelearningmastery.com/how-to-run-your-first-classifier-in-weka/
+* https://machinelearningmastery.com/how-to-run-your-first-classifier-in-weka/
+* https://machinelearningmastery.com/use-regression-machine-learning-algorithms-weka/
+* https://weka.wikispaces.com/Use+Weka+in+your+Java+code
+* https://www.cs.waikato.ac.nz/ml/weka/documentation.html
+* http://www.uky.edu/~nyu222/tutorials/Weka.htm
+* https://www.researchgate.net/publication/216300961_Symbolic_regression_using_abstract_expression_grammars
+* http://radio.feld.cvut.cz/conf/poster2015/proceedings/Section_ICS/ICS_084_Zegklitz.pdf
+* http://adsabs.harvard.edu/abs/2011gptp.book..109K
+
 
 ## Anotações
 
@@ -18,7 +26,7 @@
 
 ## Weka
 
-*  
+* usar a LibSVM também?
 
 ## Auto-Weka
 
