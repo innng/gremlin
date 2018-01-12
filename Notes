@@ -1,0 +1,6 @@
+Gramática pra regressão simbólica só pra teste
+Weka possui ensemble no metaclassificador
+Metaclassificador pra selecionar preprocessamento
+Tudo da Gui tá na cli
+Fitness será rodando weKa e usando a f measure
+Seleção de atributos serve pra ajudar na classificação 
