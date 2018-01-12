@@ -22,7 +22,7 @@
 	* Pdf sobre gp baseado em gramática
 * http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.649.6050&rep=rep1&type=pdf
 	* Regressão simbólica com gp baseado em gramática
-
+* https://www.researchgate.net/publication/266658252_A_genetic_programming_problem_definition_language_code_generator_for_the_EpochX_framework
 
 ## Dúvidas
 * Qual a relação entre o projeto e uma gramática para regressão simbólica?
@@ -31,6 +31,7 @@
 * Integração servirá pra rodar o Weka ao final da execução ou pra escolha da fitness?
 * Vale a pena colocar co-evolução?
 * Gramática vai definir a construção do pipeline?
+* Qual a importância da seleção de atributos para a execução do código? Pre-processamento?
 
 ## To-do List
 * Preparar uma gramática para o projeto
@@ -44,11 +45,13 @@
 	* Espécies
 	* Fitness Sharing
 	* Co-evolução (cooperativa ou competitiva?)
+	* Opção de selecionar dataset pra treino e teste (?)
 * **Funcionamento do programa:**
 	* Representação - pipeline em forma de árvore:
-		* Pre-processamento: adição filtro ou não
+		* Pre-processamento: adição filtro ou não e seleção de atributos
+			* Seleção de atributos não é realmente necessária porque já tem metaclassificador e filtro que a faz
 		* Processamento: classificador/meta e paramêtros
-		* Pos-processamento: não tem (?)
+		* Pos-processamento: tipo de avaliação (?)
 	* Gramática garante que o conjunto é válido:
 		* Garantir no crossover, na mutação e na inicialização que o pipeline roda no Weka
 		* Garantir que na busca só estarão os algoritmos que são compatíveis com o dado dataset

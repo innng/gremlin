@@ -4,6 +4,10 @@ import org.epochx.gp.model.GPModel;
 import org.epochx.representation.CandidateProgram;
 
 public final class GGP extends GPModel {
+	
+	public GGP() {
+		
+	}
 
 	@Override
 	public Class<?> getReturnType() {
