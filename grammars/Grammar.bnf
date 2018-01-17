@@ -1,9 +1,0 @@
-<prog> ::= <preproc> <proc>
-		 | <proc>
-<preproc> ::= 
-<proc> ::= <metaclass> <metapar> <class> <par>
-		 | <class> <par>
-<metaclass> ::=
-<metapar> ::=
-<class> ::=
-<par> ::=

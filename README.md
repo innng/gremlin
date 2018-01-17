@@ -4,59 +4,99 @@
 * http://www.uky.edu/~nyu222/tutorials/Weka.htm
 	* Tutorial para rodar o weka pela command-line
 * http://citeseer.ist.psu.edu/viewdoc/download;jsessionid=95A6782EFD289D8852FE5B6253EA47F2?doi=10.1.1.26.2091&rep=rep1&type=pdf
-	* Paper: Grammatically-based Genetic Programming 
+	* Paper: Grammatically-based Genetic Programming
 * http://dces.essex.ac.uk/staff/rpoli/gp-field-guide/A_Field_Guide_to_Genetic_Programming.pdf
-	* A Field Guide to Genetic Programming 
+	* A Field Guide to Genetic Programming
 * https://machinelearningmastery.com/use-regression-machine-learning-algorithms-weka/
-	* Como usar algoritmos de regressão pra machine learning
+	* Como usar algoritmos de regressÃ£o pra machine learning
 * https://weka.wikispaces.com/Use+Weka+in+your+Java+code
-	* Colocar Weka no código Java
+	* Colocar Weka no cÃ³digo Java
 * https://www.cs.waikato.ac.nz/ml/weka/documentation.html
-	* Toda a documentação disponível do Weka
+	* Toda a documentaÃ§Ã£o disponÃ­vel do Weka
 * https://www.researchgate.net/publication/216300961_Symbolic_regression_using_abstract_expression_grammars
 * https://www.lri.fr/~hansen/proceedings/2014/GECCO/companion/posters/p139.pdf
-	* Grammatical Evolution and Attribute Grammar 
+	* Grammatical Evolution and Attribute Grammar
 * https://www.cs.waikato.ac.nz/ml/weka/mooc/dataminingwithweka/
 * https://www.cs.waikato.ac.nz/ml/weka/mooc/moredataminingwithweka/
 * https://pdfs.semanticscholar.org/4caf/361402d29beae227f1b00da95d471662872d.pdf
-	* Pdf sobre gp baseado em gramática
+	* Pdf sobre gp baseado em gramÃ¡tica
 * http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.649.6050&rep=rep1&type=pdf
-	* Regressão simbólica com gp baseado em gramática
+	* RegressÃ£o simbÃ³lica com gp baseado em gramÃ¡tica
 * https://www.researchgate.net/publication/266658252_A_genetic_programming_problem_definition_language_code_generator_for_the_EpochX_framework
+* https://weka.wikispaces.com/file/view/Build_classifier_353.pdf/82916711/Build_classifier_353.pdf
 
-## Dúvidas
-* Qual a relação entre o projeto e uma gramática para regressão simbólica?
-* Utilizar todos os paramêtros disponíveis (command-line + GUI) ou só da GUI?
-* Por que o Auto-Weka não é consistente com escolha do algoritmo (algoritmo muda a cada execução)? Seed?
-* Integração servirá pra rodar o Weka ao final da execução ou pra escolha da fitness?
-* Vale a pena colocar co-evolução?
-* Gramática vai definir a construção do pipeline?
-* Qual a importância da seleção de atributos para a execução do código? Pre-processamento?
+## DÃºvidas
+* Por que o Auto-Weka nÃ£o Ã© consistente com escolha do algoritmo (algoritmo muda a cada execuÃ§Ã£o)? Seed?
+	* verificar
 
 ## To-do List
-* Preparar uma gramática para o projeto
-* Implementar as funções para usar o weka dentro do código
-* Montar um algoritmo para o gp baseado em gramática
+* Preparar uma gramÃ¡tica para o projeto
+* Implementar as funÃ§Ãµes para usar o weka dentro do cÃ³digo
+* Montar um algoritmo para o gp baseado em gramÃ¡tica
 * Selecionar melhorias para implementar no gp
-* Procurar todos os paramêtros possíveis e o seu intervalo de funcionamento
+* Procurar todos os paramÃªtros possÃ­veis e o seu intervalo de funcionamento
 
-## Anotações
+## AnotaÃ§Ãµes
 * **Melhorias que podem ser adicionadas:**
-	* Espécies
+	* EspÃ©cies
 	* Fitness Sharing
-	* Co-evolução (cooperativa ou competitiva?)
-	* Opção de selecionar dataset pra treino e teste (?)
+	* Co-evoluÃ§Ã£o (cooperativa ou competitiva?)
+	* OpÃ§Ã£o de selecionar dataset pra treino e teste
+
 * **Funcionamento do programa:**
-	* Representação - pipeline em forma de árvore:
-		* Pre-processamento: adição filtro ou não e seleção de atributos
-			* Seleção de atributos não é realmente necessária porque já tem metaclassificador e filtro que a faz
-		* Processamento: classificador/meta e paramêtros
-		* Pos-processamento: tipo de avaliação (?)
-	* Gramática garante que o conjunto é válido:
-		* Garantir no crossover, na mutação e na inicialização que o pipeline roda no Weka
-		* Garantir que na busca só estarão os algoritmos que são compatíveis com o dado dataset
-* **Opções pra rodar um classificador:**
-	* Aplicar filtro nos dados
-		* Escolher paramêtros
-	* Escolher classificador
-		* Escolher paramêtros
+	* RepresentaÃ§Ã£o - pipeline em forma de Ã¡rvore:
+		* Pre-processamento: adiÃ§Ã£o filtro ou nÃ£o e seleÃ§Ã£o de atributos
+			* SeleÃ§Ã£o de atributos nÃ£o Ã© realmente necessÃ¡ria porque jÃ¡ tem metaclassificador e filtro que a faz
+		* Processamento: classificador/meta e paramÃªtros
+		* Pos-processamento: ensemble
+	* GramÃ¡tica garante que o conjunto Ã© vÃ¡lido:
+		* Garantir no crossover, na mutaÃ§Ã£o e na inicializaÃ§Ã£o que o pipeline roda no Weka
+		* Garantir que na busca sÃ³ estarÃ£o os algoritmos que sÃ£o compatÃ­veis com o dado dataset
+
+* **Algoritmos e paramÃªtros**
+* Classificadores:
+	* BayesNet
+	* NaiveBayes
+	* NaiveBayesMultinomial (nÃ£o tem no manual)
+	* GaussianProcesses
+	* LinearRegression
+	* Logistic
+	* MultiLayerPerceptron
+	* SGD
+	* SimpleLinearRegression (nÃ£o tem no manual)
+	* SimpleLogistic
+	* SMO
+	* SMOreg
+	* VotedPerceptron
+	* IBk
+	* KStar
+	* DecisionTable
+	* JRip
+	* M5Rules
+	* OneR
+	* PART
+	* ZeroR (nÃ£o tem no manual)
+	* DecisionStump (nÃ£o tem no manual)
+	* J48
+	* LMT
+	* M5P
+	* RandomForest
+	* RandomTree
+	* REPTree
+* Metaclassificadores:
+	* LWL (nÃ£o tem no manual)
+	* AdaBoostM1 (nÃ£o tem no manual)
+	* AdditiveRegression (nÃ£o tem no manual)
+	* AttributeSelectedClassifier
+	* Bagging
+	* RandomComitee
+	* RandomSubSpace
+* Ensemble:
+	* Stacking
+	* Vote
+* SeleÃ§Ã£o de atributos:
+	* AvaliaÃ§Ã£o:
+		* CfsSubsetEval
+	* Busca:
+		* BestFirst
+		* GreedyStepwise
