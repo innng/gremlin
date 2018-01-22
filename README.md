@@ -24,29 +24,17 @@
 * O que significa i, il e l que seguem os números?
 * O que são os parâmetros denomidos HIDDEN e porque eles tem várias opções mas só usam uma sempre?
 * Os condicionais dos parâmetros do Auto-Weka não são os condicionais do Weka e vice-versa. Por quê? Onde são os condicionais do Auto-Weka?
-
-## To-do List
-1. Terminar de verificar todos os algoritmos e parâmetros usados, bem como os intervalos
-2. Rodar e estudar um GR
-3. Terminar as duas playlists do Weka
-4. Ler Report do Alex
-5. Descobrir qual o papel de iterated e randomizable
-6. Testar a gramática simples
-7. Usar Weka e Auto-Weka por command-line
-8. Aprender mais sobre gramáticas BNF
-9. Começar a gramática BNF
-10. Aprender sobre as funcionalidades do EpochX
-11. Verificar indivíduos gerados na inicialização pela gramática
-12. Terminar de implementar o Meta Classificador do Weka
-13. Selecionar melhorias para implementar no GP
+* Algum motivo pra separação dos parâmetros de um algoritmo ser antecedido por -- no caso de um classificador e dentro de " " no restante?
+* Descobrir qual o papel de iterated e randomizable
 
 ## Decisões de projeto
 * Preprocessamento e posprocessamento selecionados por metaclassificador
-* Meta classificador
+* Próprio projeto é um meta classificador
 * Fazer uma cadeia de meta classificadores do Weka a partir do meu
 
 ## Anotações
-* Os parâmetros de cada algoritmo escolhido são separados por --
+* Os parâmetros de um classificador selecionado por outro são antecedidos por --
+* Os parâmetros e o nome de um algoritmo que não é classificador vem dentro de " "
 
 * **Melhorias que podem ser adicionadas:**
 	* Espécies
@@ -54,7 +42,7 @@
 	* Co-evolução (cooperativa ou competitiva?)
 	* Opção de selecionar dataset pra treino e teste
 
-* **Funcionamento do programa:**
+* **Funcionamento do programa:** 
 	* Representação - pipeline em forma de árvore:
 		* Pre-processamento: seleção de atributos e adição de filtro
 			* Seleção de atributos não é realmente necessária porque já tem metaclassificador e filtro que a faz
@@ -88,39 +76,210 @@
 	* Attribute Selection
 		* Eval
 			* CfsSubsetEval
+				* locallyPredictive (-L)
+				* missingSeparate (-M)
+				* numThreads  (-E)
+				* poolSize (-P)
+				* preComputeCorrelationMatrix (-Z)
 		* Search
 			* BestFirst
+				* direction (-D)
+				* lookupCacheSize (-?)
+				* searchTerminatior (-N)
+				* startSet (-P)
 			* GreedyStepwise
+				* conservativeForwardSelection (-C)
+				* debuggingOutput (-D)
+				* generateRanking (-R)
+				* numToSelect (-N)
+				* searchBackwards (-B)
+				* startSet (-P)
+				* threshold (-T) 
 	* Base
 		* BayesNet
+			* estimator (-E)
+			* searchAlgorithm (-Q)
+			* useADTree (-D)
 		* NaiveBayes
+			* displayModelInOldFormat (-O)
+			* useKernelEstimator (-K)
+			* useSupervisedDiscretization (-D)
 		* NaiveBayesMultinomial
 		* Logistic
+			* maxIts (-M)
+			* ridge (-R)
+			* useConjugateGradientDescent (-C)
 		* MultilayerPerceptron
+			* GUI (-G)
+			* autoBuild (-?)
+			* decay (-D)
+			* hiddenLayers (-H)
+			* learningRate (-L)
+			* momentum (-M)
+			* nominalToBinaryFilter (-B)
+			* normalizeAttributes (-I)
+			* normalizeNumericClass (-C)
+			* reset (-R)
+			* seed (-S)
+			* trainingTime (-N)
+			* validationSetSize (-V)
+			* validationThreshold (-E)
 		* SGD
+			* dontNormalize (-N)
+			* dontReplaceMissing (-M)
+			* epochs (-E)
+			* epsilon (-C)
+			* lambda (-R)
+			* learningRate (-L)
+			* lossFunction (-F)
+			* seed (-S)
 		* SimpleLogistic
+			* errorOnProbabilities (-P)
+			* heuristicStop (-H)
+			* maxBoostingIterations (-M)
+			* numBoostingIterations (-I)
+			* useAIC (-A)
+			* useCrossValidation (-S)
+			* weightTrimBeta (-W)
 		* SMO
+			* buildCalibrationModels (-M)
+			* c (-C)
+			* calibrator (-calibrator)
+			* checksTurnedOff (-no-checks)
+			* epsilon (-P)
+			* filterType (-N)
+			* kernel (-K)
+			* numFolds (-V)
+			* randomSeed (-W)
+			* toleranceParameter (-L)
 		* VotedPerceptron
+			* exponent (-E)
+			* maxK (-M)
+			* numIterations (-I)
+			* seed (-S)
 		* IBk
+			* KNN (-K)
+			* crossValidate (-X)
+			* distanceWeighting (-I/-F)
+			* meanSquare (-E)
+			* nearestNeightbourSearchAlgorithm (-A)
+			* windowSize (-W)
 		* KStar
+			* entropicAutoBlend (-E)
+			* globalBlend (-B)
+			* missingMode (-M)
 		* DecisionTable
+			* crossVal (-X)
+			* evaluationMeasure (-E)
+			* search (-S)
+			* useIBk (-I)
 		* JRip
+			* checkErrorRate (-E)
+			* folds (-F)
+			* minNo (-N)
+			* optimizations (-O)
+			* seed (-S)
+			* usePruning (-P)
 		* OneR
+			* minBucketSize (-B)
 		* PART
+			* binarySplits (-B)
+			* confidenceFactor (-C)
+			* minNumObj (-M)
+			* numFolds (-N)
+			* reducedErrorPruning (-R)
+			* seed (-Q)
+			* unpruned (-U)
+			* useMDLcorrection (-J)
 		* ZeroR
 		* DecisionStump
 		* J48
+			* binarySplits (-B)
+			* collapseTree (-O)
+			* confidenceFactor (-C)
+			* minNumObj (-M)
+			* numFolds (-N)
+			* reducedErrorPruning (-R)
+			* saveInstanceData (-L)
+			* seed (-?)
+			* subtreeRaising (-S)
+			* unpruned (-U)
+			* useLaplace (-A)
+			* useMDLcorrection (-J)
 		* LMT
+			* convertNominal (-B)
+			* errorOnProbabilities (-P)
+			* fastRegression (-C)
+			* minNumInstances (-M)
+			* numBoostingIterations (-I)
+			* splitOnResiduals (-R)
+			* useAIC (-A)
+			* weightTrimBeta (-W)
 		* RandomForest
+			* bagSizePercent (-P)
+			* breakTiesRandomly (-B)
+			* calcOutOfBag (-O)
+			* maxDepth (-depth)
+			* numFeatures (-K)
+			* numIterations (-I)
+			* seed (-S)
 		* RandomTree
+			* KValue (-K)
+			* allowUnclassifiedInstances (-U)
+			* breakTiesRandomly (-B)
+			* maxDepth (-depth)
+			* minNum (-M)
+			* minVarianceDrop (-V)
+			* numFolds (-N)
+			* seed (-S)
 		* REPTree
+			* initialCount (-I)
+			* maxDepth (-L)
+			* minNum (-M)
+			* minVarianceDrop (-V)
+			* noPruning (-P)
+			* numFolds (-N)
+			* seed (-S)
+			* spreadInitialCount (-R)
 	* Ensemble
 		* Stacking
+			* classifiers (-B)
+			* metaClassifier (-M)
+			* numFolds (-X)
+			* seed (-S)
 		* Vote
+			* classifiers (-B)
+			* cõmbinationRule (-R)
+			* preBuiltClassifiers (-P)
+			* seed (-S)
 	* Meta
 		* LWL
+			* KNN (-K)
+			* classifier (-W)
+			* nearestNeighbourSearchAlgorithm (-A)
+			* weightingKernel (-U)
 		* AdaBoostM1
+			* classifier (-W)
+			* numIterations (-I)
+			* seed (-S)
+			* useResampling (-Q)
+			* weightThreshold (-P)
 		* AttributeSelectedClassifier
+			* classifier (-W)
+			* evaluator (-E)
+			* search (-S)
 		* Bagging
+			* bagSizePercent (-P)
+			* calcOutOfBag (-O)
+			* classifier (-W)
+			* numIterations (-I)
+			* seed (-1)
 		* RandomComittee
+			* classifier (-W)
+			* numIterations (-I)
+			* seed (-S)
 		* RandomSubSpace
+			* classifier (-W)
+			* numIterations (-I)
+			* seed (-S)
+			* subSpaceSize (-P)
