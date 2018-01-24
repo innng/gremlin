@@ -3,6 +3,12 @@ package src;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 
+import org.epochx.gr.model.GRModel;
+import org.epochx.life.GenerationAdapter;
+import org.epochx.life.Life;
+import org.epochx.stats.StatField;
+import org.epochx.stats.Stats;
+
 import src.*;
 
 public class General {
@@ -23,7 +29,18 @@ public class General {
 		if(data.classIndex() == -1)
 			data.setClassIndex(data.numAttributes() - 1);
 		
-		System.out.println("oi");
+		GRModel model = new TheGR();
+		
+		Life.get().addGenerationListener(new GenerationAdapter() {
+			public void onGenerationEnd() {
+				Stats.get().print(StatField.GEN_NUMBER,
+								  StatField.GEN_FITNESS_MIN,
+								  StatField.GEN_FITTEST_PROGRAM);
+			}
+		});
+		
+		model.run();
+
 	}
 
 	

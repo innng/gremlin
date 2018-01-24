@@ -5,13 +5,17 @@ import org.epochx.tools.grammar.Grammar;
 
 public class TheGR extends GRModel {
 	
-	public static final String GRAMMAR_FRAGMENT = "<start> ::= Multilayerperceptron |"
+	public static final String GRAMMAR_FRAGMENT_1 = "<start> ::= Multilayerperceptron |"
 												+ " LogisticRegression |"
 												+ " DecisionTree |"
 												+ " RandomForest";
+
+	public static final String GRAMMAR_FRAGMENT_2 = "<start> ::= <MLP> | <Trees>\n"
+												  + "<MLP> ::= MultilayerPerceptron\n"
+												  + "<Trees> ::= DecisionTree | RandomForest";
 	
 	public TheGR() {
-		setGrammar(new Grammar(GRAMMAR_FRAGMENT));
+		setGrammar(new Grammar(GRAMMAR_FRAGMENT_2));
 	}
 
 	@Override
