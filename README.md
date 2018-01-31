@@ -35,6 +35,7 @@
 ## Anotações
 * Os parâmetros de um classificador selecionado por outro são antecedidos por --
 * Os parâmetros e o nome de um algoritmo que não é classificador vem dentro de " "
+* Rodar pelo bash o weka: java -cp weka.jar weka.classifiers.trees.J48
 
 * **Melhorias que podem ser adicionadas:**
 	* Espécies
@@ -471,3 +472,10 @@
 				* (1; 1)
 			* subSpaceSize (-P)
 				* ([0.1, 1]; 0.5)
+
+* **Gramática**
+* BNF grammar:
+	* set of tokens
+	* set of non-terminal symbols
+	* start symbol
+	* set of productions

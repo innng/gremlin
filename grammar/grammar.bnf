@@ -1,0 +1,51 @@
+<start> ::= <attSelPath> | <baseClPath> | <metaClPath> | <ensembPath>
+
+<attSelPath> ::= <attSel>
+<baseClPath> ::= <baseCl>
+<metaClPath> ::= <metaCl>
+<ensembPath> ::= <ensemb>
+
+<attSel> ::= <AttributeSelectedClassifier> <eval> <search>
+<baseCl> ::= <BayesNet> | <NaiveBayes> | <NaiveBayesMultinomial> | <Logistic> | <MultilayerPerceptron> | <SGD>
+           | <SimpleLogistic> | <SMO> | <VotedPerceptron> | <IBk> | <KStar> | <DecisionTable> | <JRip> | <OneR> | <PART>
+           | <ZeroR> | <DecisionStump> | <J48> | <LMT> | <RandomForest> | <RandomTree> | <REPTree>
+<metaCl> ::= <LWL> | <AdaBoostM1> | <Bagging> | <RandomCommittee> | <RandomSubSpace>
+<ensemb> ::= <Stacking> | <Vote>
+
+<eval> ::= <CfsSubsetEval>
+<search> ::= <BestFirst> | <GreedyStepwise>
+
+<CfsSubsetEval> ::= "weka.attributeSelection.CfsSubsetEval"
+<BestFirst> ::= "weka.attributeSelection.BestFirst"
+<GreedyStepwise> ::= "weka.attributeSelection.GreedyStepwise"
+<AttributeSelectedClassifier> ::= "weka.classifiers.meta.AttributeSelectedClassifier"
+<BayesNet> ::= "weka.classifiers.bayes.BayesNet"
+<NaiveBayes> ::= "weka.classifiers.bayes.NaiveBayes"
+<NaiveBayesMultinomial> ::= "weka.classifiers.bayes.NaiveBayesMultinomial"
+<Logistic> ::= "weka.classifiers.functions.Logistic"
+<MultilayerPerceptron> ::= "weka.classifiers.functions.MultilayerPerceptron"
+<SGD> ::= "weka.classifiers.functions.SGD"
+<SimpleLogistic> ::= "weka.classifiers.functions.SimpleLogistic"
+<SMO> ::= "weka.classifiers.functions.SMO"
+<VotedPerceptron> ::= "weka.classifiers.functions.VotedPerceptron"
+<IBk> ::= "weka.classifiers.lazy.IBk"
+<KStar> ::= "weka.classifiers.lazy.KStar"
+<DecisionTable> ::= "weka.classifiers.rules.DecisionTable"
+<JRip> ::= "weka.classifiers.rules.JRip"
+<OneR> ::= "weka.classifiers.rules.OneR"
+<PART> ::= "weka.classifiers.rules.PART"
+<ZeroR> ::= "weka.classifiers.rules.ZeroR"
+<DecisionStump> ::= "weka.classifiers.trees.DecisionStump"
+<J48> ::= "weka.classifiers.trees.J48"
+<LMT> ::= "weka.classifiers.trees.LMT"
+<RandomForest> ::= "weka.classifiers.trees.RandomForest"
+<RandomTree> ::= "weka.classifiers.trees.RandomTree"
+<REPTree> ::=  "weka.classifiers.trees.REPTree"
+<LWL> ::= "weka.classifiers.lazy.LWL"
+<AdaBoostM1> ::= "weka.classifiers.meta.AdaBoostM1"
+<Bagging> ::= "weka.classifiers.meta.Bagging"
+<RandomCommittee> ::= "weka.classifiers.meta.RandomCommittee"
+<RandomSubSpace> ::= "weka.classifiers.meta.RandomSubSpace"
+<Stacking> ::= "weka.classifiers.meta.Stacking"
+<Vote> ::= "weka.classifiers.meta.Vote"
+
