@@ -22,7 +22,7 @@
 
 ## Dúvidas
 * O que significa i, il e l que seguem os números?
-* O que são os parâmetros denomidos HIDDEN e porque eles tem várias opções mas só usam uma sempre?
+* O que são os parâmetros denominados HIDDEN e porque eles tem várias opções mas só usam uma sempre?
 * Os condicionais dos parâmetros do Auto-Weka não são os condicionais do Weka e vice-versa. Por quê? Onde são os condicionais do Auto-Weka?
 * Algum motivo pra separação dos parâmetros de um algoritmo ser antecedido por -- no caso de um classificador e dentro de " " no restante?
 * Descobrir qual o papel de iterated e randomizable
