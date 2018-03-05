@@ -15,11 +15,11 @@ import org.epochx.tools.random.JavaRandom;
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
-import weka.classifiers.trees.J48;
 import weka.core.Capabilities;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.Option;
+import weka.core.converters.ConverterUtils.DataSource;
 
 import java.io.File;
 import java.io.Serializable;
@@ -36,33 +36,32 @@ class Gremlin extends AbstractClassifier {
 
         @Override
         public double getFitness(CandidateProgram candidateProgram) {
-            String candidate = candidateProgram.toString();
+//            String candidate = candidateProgram.toString();
+//
+//            String[] auxiliarSplit = null;
+//            try {
+//                auxiliarSplit = splitOptions(candidate);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//
+//            assert auxiliarSplit != null;
+//            String name = auxiliarSplit[0];
+//
+//            String[] options = null;
+//
+//            System.arraycopy(auxiliarSplit, 1, options, 0, auxiliarSplit.length - 1);
+//
+//            double fMeasure = 0;
+//            try {
+//                fMeasure = execute(name, options);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//
+//            return fMeasure;
 
-            String[] auxiliarSplit = null;
-            try {
-                auxiliarSplit = splitOptions(candidate);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            String name = auxiliarSplit[0];
-            String[] options = null;
-            for(int i = 1; i < auxiliarSplit.length; i++)
-                options[i - 1] = auxiliarSplit[i];
-
-            Classifier individual = null;
-            Evaluation eval = null;
-            try {
-                individual = AbstractClassifier.forName(name, options);
-                individual.buildClassifier(trainFile);
-                eval = new Evaluation(trainFile);
-                eval.crossValidateModel(individual, trainFile, crossValidationFolds, trainFile.getRandomNumberGenerator(1), seed);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            double fMeasure = eval.weightedFMeasure();
-            return fMeasure;
+            return 0;
         }
     }
 
@@ -72,8 +71,8 @@ class Gremlin extends AbstractClassifier {
     private Classifier classifier;
     private Instances trainFile;
     private Instances testFile;
-
     private Evaluation evaluation;
+
     private String trainPath;
     private String testPath;
 
@@ -84,22 +83,44 @@ class Gremlin extends AbstractClassifier {
 
     private GR grModel = new GR();
 
-    private Gremlin() {
-        if(trainFile.classIndex() == -1)
-            trainFile.setClassIndex(trainFile.numAttributes() - 1);
+    public Gremlin(String[] args) throws Exception {
+        int trainPathIndex = -1, testPathIndex = -1;
+        DataSource source;
 
-        if(testFile.classIndex() == -1)
-            testFile.setClassIndex(testFile.numAttributes() - 1);
+        for(int i = 0; i < args.length; i++) {
+            if(args[i].equals("-t"))
+                trainPathIndex = i + 1;
+            if(args[i].equals("-T"))
+                testPathIndex = i + 1;
+        }
+
+        if(trainPathIndex != -1) {
+            trainPath = args[trainPathIndex];
+            source = new DataSource(trainPath);
+            trainFile = source.getDataSet();
+
+            if(trainFile.classIndex() == -1)
+                trainFile.setClassIndex(trainFile.numAttributes() - 1);
+        }
+        if(testPathIndex != -1) {
+            testPath = args[testPathIndex];
+            source = new DataSource(testPath);
+            testFile = source.getDataSet();
+
+            if(testFile.classIndex() == -1)
+                testFile.setClassIndex(testFile.numAttributes() - 1);
+        }
+
     }
 
-    public static void main(String[] args) {
-        AbstractClassifier.runClassifier(new Gremlin(), args);
+    public static void main(String[] args) throws Exception {
+        AbstractClassifier.runClassifier(new Gremlin(args), args);
     }
 
     @Override
     public void buildClassifier(Instances instances) throws Exception {
-        grammarPath = "E:\\UbuntuBashFiles\\git\\gremlin\\grammar\\backup.bnf";
-        tournamentSize = 3;
+        setGrammarPath("E:\\UbuntuBashFiles\\git\\gremlin\\grammar\\grammar.bnf");
+        setTournamentSize(3);
 
         File grammarFile = new File(grammarPath);
 
@@ -181,31 +202,93 @@ class Gremlin extends AbstractClassifier {
         return super.toString();
     }
 
-    private String getGrammarPath() { return grammarPath; }
+    public double execute(String name, String[] options) throws Exception {
+        Classifier individual = AbstractClassifier.forName(name, options);
+        individual.buildClassifier(trainFile);
+        Evaluation eval = new Evaluation(trainFile);
+        eval.crossValidateModel(individual, trainFile, crossValidationFolds, trainFile.getRandomNumberGenerator(1), seed);
 
-    private void setGrammarPath(String grammarPath) {
+        return eval.weightedFMeasure();
+    }
+
+    public Classifier getClassifier() {
+        return classifier;
+    }
+
+    public void setClassifier(Classifier classifier) {
+        if(classifier != null)
+            this.classifier = classifier;
+    }
+
+    public Instances getTrainFile() {
+        return trainFile;
+    }
+
+    public void setTrainFile(Instances trainFile) {
+        if(trainFile != null)
+            this.trainFile = trainFile;
+    }
+
+    public Instances getTestFile() {
+        return testFile;
+    }
+
+    public void setTestFile(Instances testFile) {
+        if(testFile != null)
+            this.testFile = testFile;
+    }
+
+    public Evaluation getEvaluation() {
+        return evaluation;
+    }
+
+    public void setEvaluation(Evaluation evaluation) {
+        if(evaluation != null)
+            this.evaluation = evaluation;
+    }
+
+    public String getGrammarPath() {
+        return grammarPath;
+    }
+
+    public void setGrammarPath(String grammarPath) {
         if(grammarPath != null)
             this.grammarPath = grammarPath;
     }
 
-    private String getTrainPath() { return trainPath; }
+    public String getTrainPath() {
+        return trainPath;
+    }
 
-    private void setTrainPath(String trainPath) {
+    public void setTrainPath(String trainPath) {
         if(trainPath != null)
             this.trainPath = trainPath;
     }
 
-    private String getTestPath() { return testPath; }
+    public String getTestPath() {
+        return testPath;
+    }
 
-    private void setTestPath(String testPath) {
+    public void setTestPath(String testPath) {
         if(testPath != null)
             this.testPath = testPath;
     }
 
-    private int getTournamentSize() { return tournamentSize; }
+    public int getTournamentSize() {
+        return tournamentSize;
+    }
 
-    private void setTournamentSize(int tournamentSize) {
+    public void setTournamentSize(int tournamentSize) {
         if(tournamentSize > 0 && tournamentSize <= grModel.getPopulationSize())
             this.tournamentSize = tournamentSize;
+    }
+
+    public int getCrossValidationFolds() {
+        return crossValidationFolds;
+    }
+
+    public void setCrossValidationFolds(int crossValidationFolds) {
+        if(crossValidationFolds > 0)
+            this.crossValidationFolds = crossValidationFolds;
     }
 }
