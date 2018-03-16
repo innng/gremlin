@@ -13,17 +13,17 @@
                    | <SimpleLogistic> | <SMO> | <VotedPerceptron> | <IBk> | <KStar> | <DecisionTable> | <JRip> | <OneR>
                    | <PART> | <ZeroR> | <DecisionStump> | <J48> | <LMT> | <RandomForest> | <RandomTree> | <REPTree>
 
-<stackingEnsemble> ::= <Stacking> "B" <baseClassifier>
-                     | <Stacking> "B" <baseClassifier> "B" <baseClassifier>
-                     | <Stacking> "B" <baseClassifier> "B" <baseClassifier> "B" <baseClassifier>
-                     | <Stacking> "B" <baseClassifier> "B" <baseClassifier> "B" <baseClassifier> "B" <baseClassifier>
-                     | <Stacking> "B" <baseClassifier> "B" <baseClassifier> "B" <baseClassifier> "B" <baseClassifier> "B" <baseClassifier>
+<stackingEnsemble> ::= <Stacking> "1C" "B" <baseClassifier>
+                     | <Stacking> "2C" "B" <baseClassifier> "B" <baseClassifier>
+                     | <Stacking> "3C" "B" <baseClassifier> "B" <baseClassifier> "B" <baseClassifier>
+                     | <Stacking> "4C" "B" <baseClassifier> "B" <baseClassifier> "B" <baseClassifier> "B" <baseClassifier>
+                     | <Stacking> "5C" "B" <baseClassifier> "B" <baseClassifier> "B" <baseClassifier> "B" <baseClassifier> "B" <baseClassifier>
 
-<voteEnsemble> ::= <Vote> "B" <baseClassifier>
-                 | <Vote> "B" <baseClassifier> "B" <baseClassifier>
-                 | <Vote> "B" <baseClassifier> "B" <baseClassifier> "B" <baseClassifier>
-                 | <Vote> "B" <baseClassifier> "B" <baseClassifier> "B" <baseClassifier> "B" <baseClassifier>
-                 | <Vote> "B" <baseClassifier> "B" <baseClassifier> "B" <baseClassifier> "B" <baseClassifier> "B" <baseClassifier>
+<voteEnsemble> ::= <Vote> "1C" "B" <baseClassifier>
+                 | <Vote> "2C" "B" <baseClassifier> "B" <baseClassifier>
+                 | <Vote> "3C" "B" <baseClassifier> "B" <baseClassifier> "B" <baseClassifier>
+                 | <Vote> "4C" "B" <baseClassifier> "B" <baseClassifier> "B" <baseClassifier> "B" <baseClassifier>
+                 | <Vote> "5C" "B" <baseClassifier> "B" <baseClassifier> "B" <baseClassifier> "B" <baseClassifier> "B" <baseClassifier>
 
 <LWL> ::= "LWL" "K" <LWL-KNN> "U" <LWL-weightingKernel>
 <LWL-KNN> ::= "-1" | <LWL-KNN-otherValues>
