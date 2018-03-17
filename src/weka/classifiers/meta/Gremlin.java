@@ -9,7 +9,6 @@ import org.epochx.life.GenerationAdapter;
 import org.epochx.life.Life;
 import org.epochx.op.selection.TournamentSelector;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.stats.Stat;
 import org.epochx.stats.Stats;
 import org.epochx.tools.grammar.Grammar;
 import org.epochx.tools.random.JavaRandom;
@@ -39,16 +38,16 @@ public class Gremlin extends AbstractClassifier {
 
         @Override
         public double getFitness(CandidateProgram candidateProgram) {
-//            Classifier individual = null;
-//            double fMeasure = 0;
-//            try {
-//                individual = transforms(candidateProgram);
-//                fMeasure = execute(individual);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            return fMeasure;
-            return 0;
+            Classifier individual;
+            double fMeasure = 0;
+
+            try {
+                individual = transforms(candidateProgram);
+                fMeasure = execute(individual);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return fMeasure;
         }
     }
 
@@ -83,10 +82,10 @@ public class Gremlin extends AbstractClassifier {
 
         try {
             if(trainPathIndex != -1)
-                initialConfiguration(trainInstance, args, trainPath, trainPathIndex);
+                trainInstance = initialConfiguration(args, trainPath, trainPathIndex);
 
             if(testPathIndex != -1)
-                initialConfiguration(testInstance, args, testPath, testPathIndex);
+                testInstance = initialConfiguration(args, testPath, testPathIndex);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -104,9 +103,9 @@ public class Gremlin extends AbstractClassifier {
         grModel.setMaxInitialDepth(6);
 
         grModel.setNoRuns(1);
-        grModel.setNoGenerations(50);
+        grModel.setNoGenerations(1);
         grModel.setNoElites(10);
-        grModel.setPopulationSize(100);
+        grModel.setPopulationSize(1);
         grModel.setPoolSize(50);
 
         grModel.setTerminationFitness(1.0);
@@ -130,10 +129,6 @@ public class Gremlin extends AbstractClassifier {
 
     public static void main(String[] args) {
         AbstractClassifier.runClassifier(new Gremlin(args), args);
-        String teste = "meta AdaBoostM1 P 100 I 10 Q FALSE W DecisionStump a";
-        System.out.println(teste);
-        teste = Utils.completeConfiguration(teste);
-        System.out.println(teste);
     }
 
     @Override
@@ -147,11 +142,9 @@ public class Gremlin extends AbstractClassifier {
 
         grModel.run();
 
-        CandidateProgram cp = (CandidateProgram) Stats.get().getStat(RUN_FITTEST_PROGRAM);
-        String teste = cp.toString();
-        System.out.println("aaah" + teste);
-
-        classifier = new J48();
+        CandidateProgram candidateProgram = (CandidateProgram) Stats.get().getStat(RUN_FITTEST_PROGRAM);
+        System.out.println(candidateProgram.toString());
+        classifier = transforms(candidateProgram);
         classifier.buildClassifier(instances);
     }
 
@@ -182,7 +175,7 @@ public class Gremlin extends AbstractClassifier {
 
     @Override
     public Capabilities getCapabilities() {
-        return super.getCapabilities();
+        return classifier.getCapabilities();
     }
 
     @Override
@@ -190,14 +183,16 @@ public class Gremlin extends AbstractClassifier {
         return super.toString();
     }
 
-    public void initialConfiguration(Instances data, String[] args, String dataPath, int index) throws Exception {
+    public Instances initialConfiguration(String[] args, String dataPath, int index) throws Exception {
         dataPath = args[index];
         DataSource source = new DataSource(dataPath);
-        data = source.getDataSet();
+        Instances data = source.getDataSet();
 
         if(data.classIndex() == -1) {
             data.setClassIndex(data.numAttributes() - 1);
         }
+
+        return data;
     }
 
     public Classifier transforms(CandidateProgram candidateProgram) throws Exception {
@@ -209,8 +204,12 @@ public class Gremlin extends AbstractClassifier {
         String name = auxiliarSplit[0];
 
         String[] options = null;
-        System.arraycopy(auxiliarSplit, 1, options, 0, auxiliarSplit.length - 1);
+        for(int i = 1; i < auxiliarSplit.length; i++) {
+            options[i - 1] = auxiliarSplit[i];
+            options[i - 1] = options[i - 1].trim();
+        }
 
+        name = name.trim();
         Classifier classifier = AbstractClassifier.forName(name, options);
         return classifier;
     }
