@@ -1,0 +1,121 @@
+<start> ::= <classification>
+
+<classification> ::= "base" <baseClassifier>
+
+<baseClassifier> ::= <BayesNet> | <NaiveBayes> | <NaiveBayesMulti> | <Logistic> | <MLP> | <SGD> | <SL> | <SMO> | <VotedP> | <IBk> | <KStar> | <DecisionT> | <JRip> | <OneR> | <PART> | <ZeroR> | <DecisionS> | <J48> | <LMT> | <RandomForest> | <RandomTree> | <REPTree>
+
+<BayesNet> ::= "BayesNet" "D" <BayesNet-useADTree> "Q" <BayesNet-searchAlgorithm>
+<BayesNet-useADTree> ::= "TRUE" | "FALSE"
+<BayesNet-searchAlgorithm> ::= "K2" | "HillClimber" | "LAGDHillClimber" | "SimulatedAnnealing" | "TabuSearch" | "TAN"
+
+<NaiveBayes> ::= "NaiveBayes" "K" <NaiveBayes-useKernelEstimator>
+<NaiveBayes-useSupervisedDiscretization> ::= "TRUE" | "FALSE"
+<NaiveBayes-useKernelEstimator> ::= "TRUE" | "FALSE" "D" <NaiveBayes-useSupervisedDiscretization>
+
+<NaiveBayesMulti> ::= "NaiveBayesMultinomial"
+
+<Logistic> ::= "Logistic" "R" <Logistic-ridge>
+<Logistic-ridge> ::= "RANDOM_FLOAT [1E-12, 10]"
+
+<MLP> ::= "MultilayerPerceptron" "B" <MLP-nominalToBinaryFilter> "C" <MLP-normalizeNumericClass> "D" <MLP-decay> "H" <MLP-hiddenLayers> "L" <MLP-learningRate> "M" <MLP-momentum> "R" <MLP-reset>
+<MLP-nominalToBinaryFilter> ::= "TRUE" | "FALSE"
+<MLP-normalizeNumericClass> ::= "TRUE" | "FALSE"
+<MLP-decay> ::= "TRUE" | "FALSE"
+<MLP-hiddenLayers> ::= "a" | "i" | "o" | "t"
+<MLP-learningRate> ::= "RANDOM_FLOAT [0.1, 1]"
+<MLP-momentum> ::= "RANDOM_FLOAT [0.1, 1]"
+<MLP-reset> ::= "TRUE" | "FALSE"
+
+<SGD> ::= "SGD" "F" <SGD-lossFunction> "L" <SGD-learningRate> "M" <SGD-dontReplaceMissing> "N" <SGD-dontNormalize> "R" <SGD-lambda>
+<SGD-lossFunction> ::= "0" | "1" | "2"
+<SGD-learningRate> ::= "RANDOM_FLOAT [1E-5, 0.1]"
+<SGD-dontReplaceMissing> ::= "TRUE" | "FALSE"
+<SGD-dontNormalize> ::= "TRUE" | "FALSE"
+<SGD-lambda> ::= "RANDOM_FLOAT [1E-12, 10]"
+
+<SL> ::= "SimpleLogistic" "A" <SL-useAIC> "S" <SL-useCrossValidation> "W" <SL-weightTrimBeta>
+<SL-useAIC> ::= "TRUE" | "FALSE"
+<SL-useCrossValidation> ::= "TRUE" | "FALSE"
+<SL-weightTrimBeta> ::= "0" | "RANDOM_FLOAT [0, 1]"
+
+<SMO> ::= "SMO" "C" <SMO-cost> "M" <SMO-buildCalibrationModels> "N" <SMO-filterType>
+<SMO-cost> ::= "RANDOM_FLOAT [0.5, 1.5]"
+<SMO-buildCalibrationModels> ::= "TRUE" | "FALSE"
+<SMO-filterType> ::= "0" | "1" | "2"
+
+<VotedP> ::= "VotedPerceptron" "E" <VotedP-exponent> "I" <VotedP-numIterations> "M" <VotedP-maxK>
+<VotedP-exponent> ::= "RANDOM_FLOAT [0.2, 5]"
+<VotedP-numIterations> ::= "RANDOM_INT [1, 10]"
+<VotedP-maxK> ::= "RANDOM_INT [5000, 50000]"
+
+<IBk> ::= "IBk" "E" <IBk-meanSquare> "K" <IBk-KNN> "X" <IBk-crossValidate> "IF" <IBk-distanceWeighting>
+<IBk-meanSquare> ::= "TRUE" | "FALSE"
+<IBk-KNN> ::= "RANDOM_INT [1, 64]"
+<IBk-crossValidate> ::= "TRUE" | "FALSE"
+<IBk-distanceWeighting> ::= "I" | "F" | "FALSE"
+
+<KStar> ::= "KStar" "B" <KStar-globalBlend> "E" <KStar-entropicAutoBlend> "M" <KStar-missingMode>
+<KStar-globalBlend> ::= "RANDOM_INT [1, 100]"
+<KStar-entropicAutoBlend> ::=  "TRUE" | "FALSE"
+<KStar-missingMode> ::= "a" | "d" | "m" | "n"
+
+<DecisionT> ::= "DecisionTable" "E" <DecisionT-evaluationMeasure> "I" <DecisionT-useIBk> "X" <DecisionT-crossVal>
+<DecisionT-evaluationMeasure> ::= "acc" | "rmse" | "mae" | "auc"
+<DecisionT-useIBk> ::= "TRUE" | "FALSE"
+<DecisionT-crossVal> ::= "1" | "2" | "3" | "4"
+
+<JRip> ::= "JRip" "E" <JRip-checkErrorRate> "N" <JRip-minNo> "O" <JRip-optimizations> "P" <JRip-usePruning>
+<JRip-checkErrorRate> ::= "TRUE" | "FALSE"
+<JRip-minNo> ::= "RANDOM_FLOAT [1, 5]"
+<JRip-optimizations> ::= "RANDOM_INT [1, 5]"
+<JRip-usePruning> ::= "TRUE" | "FALSE"
+
+<OneR> ::= "OneR" "B" <OneR-minBucketSize>
+<OneR-minBucketSize> ::= "RANDOM_INT [1, 32]"
+
+<PART> ::= "PART" "B" <PART-binarySplits> "M" <PART-minNumObj> "R" <PART-reducedErrorPruning>
+<PART-binarySplits> ::= "TRUE" | "FALSE"
+<PART-minNumObj> ::= "RANDOM_INT [1, 64]"
+<PART-numFolds> ::= "RANDOM_INT [2, 5]"
+<PART-reducedErrorPruning> ::= "TRUE" "N" <PART-numFolds> | "FALSE"
+
+<ZeroR> ::= "ZeroR"
+
+<DecisionS> ::= "DecisionStump"
+
+<J48> ::= "J48" "A" <J48-useLaplace> "B" <J48-binarySplits>  "J" <J48-useMDLcorrection> "M" <J48-minNumObj> "O" <J48-collapseTree> "U" <J48-unpruned>
+<J48-useLaplace> ::= "TRUE" | "FALSE"
+<J48-binarySplits> ::= "TRUE" | "FALSE"
+<J48-confidenceFactor> ::= "RANDOM_FLOAT [0, 1]"
+<J48-useMDLcorrection> ::= "TRUE" | "FALSE"
+<J48-minNumObj> ::= "RANDOM_INT [1, 64]"
+<J48-collapseTree> ::= "TRUE" | "FALSE"
+<J48-subtreeRaising> ::= "TRUE" | "FALSE"
+<J48-unpruned> ::= "TRUE" | "FALSE" "C" <J48-confidenceFactor> "S" <J48-subtreeRaising>
+
+<LMT> ::= "LMT" "A" <LMT-useAIC> "B" <LMT-convertNominal> "C" <LMT-fastRegression> "M" <LMT-minNumInstances> "P" <LMT-errorOnProbabilities> "R" <LMT-splitOnResiduals> "W" <LMT-weightTrimBeta>
+<LMT-useAIC> ::= "TRUE" | "FALSE"
+<LMT-convertNominal> ::= "TRUE" | "FALSE"
+<LMT-fastRegression> ::= "TRUE" | "FALSE"
+<LMT-minNumInstances> ::= "RANDOM_INT [1, 64]"
+<LMT-errorOnProbabilities> ::= "TRUE" | "FALSE"
+<LMT-splitOnResiduals> ::= "TRUE" | "FALSE"
+<LMT-weightTrimBeta> ::= "0" | "RANDOM_FLOAT [0, 1]"
+
+<RandomForest> ::= "RandomForest" "I" <RandomForest-numIterations> "K" <RandomForest-numFeatures> "MD" <RandomForest-maxDepth>
+<RandomForest-numIterations> ::= "RANDOM_INT [2, 256]"
+<RandomForest-numFeatures> ::= "0" | "RANDOM_INT [1, 32]"
+<RandomForest-maxDepth> ::= "0" | "RANDOM_INT [1, 20]"
+
+<RandomTree> ::= "RandomTree" "K" <RandomTree-KValue> "M" <RandomTree-minNum> "N" <RandomTree-numFolds> "U" <RandomTree-allowUnclassifiedInstances> "MD" <RandomTree-maxDepth>
+<RandomTree-KValue> ::= "0" | "RANDOM_INT [2, 32]"
+<RandomTree-minNum> ::= "RANDOM_INT [1, 64]"
+<RandomTree-numFolds> ::= "0" | "RANDOM_INT [2, 5]"
+<RandomTree-allowUnclassifiedInstances> ::= "TRUE" | "FALSE"
+<RandomTree-maxDepth> ::= "0" | "RANDOM_INT [2, 20]"
+
+<REPTree> ::= "REPTree" "L" <REPTree-maxDepth> "M" <REPTree-minNum> "P" <REPTree-noPruning> "V" <REPTree-minVarianceDrop>
+<REPTree-maxDepth> ::= "-1" | "RANDOM_INT [2, 20]"
+<REPTree-minNum> ::= "RANDOM_INT [1, 64]"
+<REPTree-noPruning> ::= "TRUE" | "FALSE"
+<REPTree-minVarianceDrop> ::= "RANDOM_FLOAT [1E-5, 1E-1]"

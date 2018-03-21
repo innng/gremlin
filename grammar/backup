@@ -1,20 +1,13 @@
-<start> ::= <preprocess> | <classification> | <ensemble>
+<start> ::= <preprocess> | <classification>
 
 <preprocess> ::= "pre" <AttributeSC> "W" <classification>
 
 <classification> ::= "meta" <metaClassifier> "W" <baseClassifier>
                    | "base" <baseClassifier>
 
-<ensemble> ::= "ensemb" <stackingEnsemble>
-             | "ensemb" <voteEnsemble>
-
 <metaClassifier> ::= <LWL> | <AdaBM1> | <Bagging> | <RandomCom> | <RandomSS>
 
 <baseClassifier> ::= <BayesNet> | <NaiveBayes> | <NaiveBayesMulti> | <Logistic> | <MLP> | <SGD> | <SL> | <SMO> | <VotedP> | <IBk> | <KStar> | <DecisionT> | <JRip> | <OneR> | <PART> | <ZeroR> | <DecisionS> | <J48> | <LMT> | <RandomForest> | <RandomTree> | <REPTree>
-
-<stackingEnsemble> ::= <Stacking>
-
-<voteEnsemble> ::= <Vote>
 
 <AttributeSC> ::= "AttributeSelectedClassifier"
 
@@ -74,7 +67,7 @@
 <SL-useCrossValidation> ::= "TRUE" | "FALSE"
 <SL-weightTrimBeta> ::= "0" | "RANDOM_FLOAT [0, 1]"
 
-<SMO> ::= "SMO" "C" <SMO-cost> "K" <SMO-kernel> "M" <SMO-buildCalibrationModels> "N" <SMO-filterType>
+<SMO> ::= "SMO" "C" <SMO-cost> "M" <SMO-buildCalibrationModels> "N" <SMO-filterType>
 <SMO-cost> ::= "RANDOM_FLOAT [0.5, 1.5]"
 <SMO-buildCalibrationModels> ::= "TRUE" | "FALSE"
 <SMO-filterType> ::= "0" | "1" | "2"
@@ -95,7 +88,7 @@
 <KStar-entropicAutoBlend> ::=  "TRUE" | "FALSE"
 <KStar-missingMode> ::= "a" | "d" | "m" | "n"
 
-<DecisionT> ::= "DecisionTable" "E" <DecisionT-evaluationMeasure> "I" <DecisionT-useIBk> "X" <DecisionT-crossVal>
+<DecisionT> ::= "DecisionTable" "E" <DecisionT-evaluationMeasure> "I" <DecisionT-useIBk> "S" <search> "X" <DecisionT-crossVal>
 <DecisionT-evaluationMeasure> ::= "acc" | "rmse" | "mae" | "auc"
 <DecisionT-useIBk> ::= "TRUE" | "FALSE"
 <DecisionT-crossVal> ::= "1" | "2" | "3" | "4"
@@ -155,9 +148,3 @@
 <REPTree-minNum> ::= "RANDOM_INT [1, 64]"
 <REPTree-noPruning> ::= "TRUE" | "FALSE"
 <REPTree-minVarianceDrop> ::= "RANDOM_FLOAT [1E-5, 1E-1]"
-
-<Stacking> ::= "Stacking"
-
-<Vote> ::= "Vote" "R" <Vote-combinationRule>
-<Vote-combinationRule> ::= "AVG" | "PROD" | "MAJ" | "MIN" | "MAX"
-

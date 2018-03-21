@@ -1,76 +1,119 @@
 package weka.classifiers.meta;
 
-import gremlin.Utils;
 import org.epochx.gr.model.GRModel;
-import org.epochx.gr.op.crossover.WhighamCrossover;
-import org.epochx.gr.op.init.RampedHalfAndHalfInitialiser;
-import org.epochx.gr.op.mutation.WhighamMutation;
 import org.epochx.life.GenerationAdapter;
 import org.epochx.life.Life;
-import org.epochx.op.selection.TournamentSelector;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.Stats;
 import org.epochx.tools.grammar.Grammar;
-import org.epochx.tools.random.JavaRandom;
+
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.Classifier;
-import weka.classifiers.evaluation.Evaluation;
+import weka.classifiers.Evaluation;
 import weka.classifiers.trees.J48;
-import weka.core.Capabilities;
-import weka.core.Instance;
-import weka.core.Instances;
-import weka.core.Option;
+import weka.core.*;
 import weka.core.converters.ConverterUtils.DataSource;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Enumeration;
+import java.util.Random;
 
+import static gremlin.Utils.completeConfiguration;
 import static org.epochx.stats.StatField.*;
-import static weka.core.Utils.splitOptions;
 
 public class Gremlin extends AbstractClassifier {
 
-    private class GremlinGR extends GRModel implements Serializable {
+    public class GremlinGR extends GRModel implements Serializable {
 
-        private static final long serialVersionUID = -2246451161244360831L;
+        private static final long serialVersionUID = -5998929814656483719L;
 
         @Override
         public double getFitness(CandidateProgram candidateProgram) {
-            Classifier individual;
-            double fMeasure = 0;
+            String candidate = candidateProgram.toString();
+            candidate = completeConfiguration(candidate);
+
+            String[] options = null;
 
             try {
-                individual = transforms(candidateProgram);
-                fMeasure = execute(individual);
+                assert candidate != null;
+                options = Utils.splitOptions(candidate);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return fMeasure;
+
+            assert options != null;
+            String name = options[0];
+            options[0] = "";
+
+            Classifier individual = null;
+            Evaluation evaluation = null;
+
+            try {
+                individual = AbstractClassifier.forName(name, options);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if(individual.getCapabilities().test(trainInstance)) {
+                try {
+                    individual.buildClassifier(trainInstance);
+                    evaluation = new Evaluation(trainInstance);
+                    evaluation.crossValidateModel(individual, trainInstance, crossValidationFolds, new Random());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                
+                return evaluation.weightedFMeasure();
+            }
+            else {
+
+                return 0.0;
+            }
         }
+
     }
 
-    private static final long serialVersionUID = 2388156596868154954L;
+    private static final long serialVersionUID = 337915604324006601L;
     private long seed = 1;
+
+    private GremlinGR grModel = new GremlinGR();
 
     private Classifier classifier;
     private Instances trainInstance;
     private Instances testInstance;
-    private Evaluation evaluation;
 
-    private File grammarFile;
-
-    private String trainPath;
-    private String testPath;
     private String grammarPath;
 
     private int tournamentSize;
     private int crossValidationFolds;
 
-    private GremlinGR grModel = new GremlinGR();
+    public static void main(String[] args) {
+        runClassifier(new Gremlin(args), args);
+    }
 
     public Gremlin(String[] args) {
+        grammarPath = "grammar/basic.bnf";
+        tournamentSize = 3;
+        crossValidationFolds = 10;
+
+        grModel.setMaxDepth(5);
+        grModel.setMaxInitialDepth(6);
+
+        grModel.setNoRuns(1);
+        grModel.setNoGenerations(50);
+        grModel.setNoElites(10);
+        grModel.setPopulationSize(100);
+        grModel.setPoolSize(50);
+
+        grModel.setTerminationFitness(1.0);
+        grModel.setCrossoverProbability(0.7);
+        grModel.setReproductionProbability(1.0);
+        grModel.setMutationProbability(0.3);
+
+        classifier = null;
+
         int trainPathIndex = -1, testPathIndex = -1;
 
         for(int i = 0; i < args.length; i++) {
@@ -82,53 +125,16 @@ public class Gremlin extends AbstractClassifier {
 
         try {
             if(trainPathIndex != -1)
-                trainInstance = initialConfiguration(args, trainPath, trainPathIndex);
+                trainInstance = openInstance(args, trainPathIndex);
 
             if(testPathIndex != -1)
-                testInstance = initialConfiguration(args, testPath, testPathIndex);
+                testInstance = openInstance(args, testPathIndex);
+            grModel.setGrammar(openGrammar());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        classifier = null;
-        evaluation = null;
 
-        grammarPath = "grammar/grammar.bnf";
-        grammarFile = new File(grammarPath);
-
-        tournamentSize = 3;
-        crossValidationFolds = 10;
-
-        grModel.setMaxDepth(5);
-        grModel.setMaxInitialDepth(6);
-
-        grModel.setNoRuns(1);
-        grModel.setNoGenerations(1);
-        grModel.setNoElites(10);
-        grModel.setPopulationSize(1);
-        grModel.setPoolSize(50);
-
-        grModel.setTerminationFitness(1.0);
-        grModel.setCrossoverProbability(0.7);
-        grModel.setMutationProbability(0.3);
-        grModel.setReproductionProbability(1.0);
-
-        try {
-            grModel.setGrammar(new Grammar(grammarFile));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        grModel.setProgramSelector(new TournamentSelector(grModel, getTournamentSize()));
-        grModel.setRNG(new JavaRandom());
-
-        grModel.setInitialiser(new RampedHalfAndHalfInitialiser(grModel));
-        grModel.setCrossover(new WhighamCrossover(grModel));
-        grModel.setMutation(new WhighamMutation(grModel));
-    }
-
-    public static void main(String[] args) {
-        AbstractClassifier.runClassifier(new Gremlin(args), args);
     }
 
     @Override
@@ -143,9 +149,27 @@ public class Gremlin extends AbstractClassifier {
         grModel.run();
 
         CandidateProgram candidateProgram = (CandidateProgram) Stats.get().getStat(RUN_FITTEST_PROGRAM);
-        System.out.println(candidateProgram.toString());
-        classifier = transforms(candidateProgram);
-        classifier.buildClassifier(instances);
+        String candidate = candidateProgram.toString();
+//        candidate = completeConfiguration(candidate);
+//
+//        String[] options = null;
+//
+//        try {
+//            options = Utils.splitOptions(candidate);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        assert options != null;
+//        String name = options[0];
+//        options[0] = "";
+//
+//        classifier = forName(name, options);
+//        classifier.buildClassifier(trainInstance);
+
+        System.out.println(candidate);
+        classifier = new J48();
+        classifier.buildClassifier(trainInstance);
     }
 
     @Override
@@ -180,11 +204,18 @@ public class Gremlin extends AbstractClassifier {
 
     @Override
     public String toString() {
-        return super.toString();
+        return classifier.toString();
     }
 
-    public Instances initialConfiguration(String[] args, String dataPath, int index) throws Exception {
-        dataPath = args[index];
+    public Grammar openGrammar() throws IOException {
+        File grammarFile = new File(grammarPath);
+        Grammar grammar = new Grammar(grammarFile);
+
+        return grammar;
+    }
+
+    public Instances openInstance(String[] args, int index) throws Exception {
+        String dataPath = args[index];
         DataSource source = new DataSource(dataPath);
         Instances data = source.getDataSet();
 
@@ -193,36 +224,6 @@ public class Gremlin extends AbstractClassifier {
         }
 
         return data;
-    }
-
-    public Classifier transforms(CandidateProgram candidateProgram) throws Exception {
-        String newClassifier = candidateProgram.toString();
-        newClassifier = Utils.completeConfiguration(newClassifier);
-
-        String[] auxiliarSplit;
-        auxiliarSplit = splitOptions(newClassifier);
-        String name = auxiliarSplit[0];
-
-        String[] options = null;
-        for(int i = 1; i < auxiliarSplit.length; i++) {
-            options[i - 1] = auxiliarSplit[i];
-            options[i - 1] = options[i - 1].trim();
-        }
-
-        name = name.trim();
-        Classifier classifier = AbstractClassifier.forName(name, options);
-        return classifier;
-    }
-
-    public double execute(Classifier classifier) throws Exception {
-        classifier.buildClassifier(trainInstance);
-        evaluation = new Evaluation(trainInstance);
-        evaluation.crossValidateModel(classifier, trainInstance, crossValidationFolds, trainInstance.getRandomNumberGenerator(seed), seed);
-        return evaluation.weightedFMeasure();
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
     }
 
     public long getSeed() {
@@ -238,8 +239,7 @@ public class Gremlin extends AbstractClassifier {
     }
 
     public void setClassifier(Classifier classifier) {
-        if(classifier != null)
-            this.classifier = classifier;
+        this.classifier = classifier;
     }
 
     public Instances getTrainInstance() {
@@ -247,8 +247,7 @@ public class Gremlin extends AbstractClassifier {
     }
 
     public void setTrainInstance(Instances trainInstance) {
-        if(trainInstance != null)
-            this.trainInstance = trainInstance;
+        this.trainInstance = trainInstance;
     }
 
     public Instances getTestInstance() {
@@ -256,44 +255,7 @@ public class Gremlin extends AbstractClassifier {
     }
 
     public void setTestInstance(Instances testInstance) {
-        if(testInstance != null)
-            this.testInstance = testInstance;
-    }
-
-    public Evaluation getEvaluation() {
-        return evaluation;
-    }
-
-    public void setEvaluation(Evaluation evaluation) {
-        if(evaluation != null)
-            this.evaluation = evaluation;
-    }
-
-    public File getGrammarFile() {
-        return grammarFile;
-    }
-
-    public void setGrammarFile(File grammarFile) {
-        if(grammarFile != null)
-            this.grammarFile = grammarFile;
-    }
-
-    public String getTrainPath() {
-        return trainPath;
-    }
-
-    public void setTrainPath(String trainPath) {
-        if(trainPath != null)
-            this.trainPath = trainPath;
-    }
-
-    public String getTestPath() {
-        return testPath;
-    }
-
-    public void setTestPath(String testPath) {
-        if(testPath != null)
-            this.testPath = testPath;
+        this.testInstance = testInstance;
     }
 
     public String getGrammarPath() {
@@ -301,8 +263,7 @@ public class Gremlin extends AbstractClassifier {
     }
 
     public void setGrammarPath(String grammarPath) {
-        if(grammarPath != null)
-            this.grammarPath = grammarPath;
+        this.grammarPath = grammarPath;
     }
 
     public int getTournamentSize() {
@@ -310,8 +271,7 @@ public class Gremlin extends AbstractClassifier {
     }
 
     public void setTournamentSize(int tournamentSize) {
-        if(tournamentSize > 0 && tournamentSize <= grModel.getPopulationSize())
-            this.tournamentSize = tournamentSize;
+        this.tournamentSize = tournamentSize;
     }
 
     public int getCrossValidationFolds() {
@@ -319,7 +279,6 @@ public class Gremlin extends AbstractClassifier {
     }
 
     public void setCrossValidationFolds(int crossValidationFolds) {
-        if(crossValidationFolds >= 0)
-            this.crossValidationFolds = crossValidationFolds;
+        this.crossValidationFolds = crossValidationFolds;
     }
 }
