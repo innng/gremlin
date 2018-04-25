@@ -1,175 +1,55 @@
 package weka.classifiers.meta;
 
-import org.epochx.gr.model.GRModel;
-import org.epochx.life.GenerationAdapter;
-import org.epochx.life.Life;
-import org.epochx.representation.CandidateProgram;
-import org.epochx.stats.Stats;
-import org.epochx.tools.grammar.Grammar;
-
+import gremlin.GeneticProgramming;
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.Classifier;
-import weka.classifiers.Evaluation;
-import weka.classifiers.trees.J48;
-import weka.core.*;
-import weka.core.converters.ConverterUtils.DataSource;
+import weka.core.Capabilities;
+import weka.core.Instance;
+import weka.core.Instances;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.Enumeration;
-import java.util.Random;
-
-import static gremlin.Utils.completeConfiguration;
-import static org.epochx.stats.StatField.*;
+import static gremlin.grammar.Utils.completeGrammar;
+import static weka.core.Utils.getOption;
+import static weka.core.Utils.splitOptions;
 
 public class Gremlin extends AbstractClassifier {
 
-    public class GremlinGR extends GRModel implements Serializable {
-
-        private static final long serialVersionUID = -5998929814656483719L;
-
-        @Override
-        public double getFitness(CandidateProgram candidateProgram) {
-            String candidate = candidateProgram.toString();
-            candidate = completeConfiguration(candidate);
-
-            String[] options = null;
-
-            try {
-                assert candidate != null;
-                options = Utils.splitOptions(candidate);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            assert options != null;
-            String name = options[0];
-            options[0] = "";
-
-            Classifier individual = null;
-            Evaluation evaluation = null;
-
-            try {
-                individual = AbstractClassifier.forName(name, options);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            if(individual.getCapabilities().test(trainInstance)) {
-                try {
-                    individual.buildClassifier(trainInstance);
-                    evaluation = new Evaluation(trainInstance);
-                    evaluation.crossValidateModel(individual, trainInstance, crossValidationFolds, new Random());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                
-                return evaluation.weightedFMeasure();
-            }
-            else {
-
-                return 0.0;
-            }
-        }
-
-    }
-
     private static final long serialVersionUID = 337915604324006601L;
-    private long seed = 1;
-
-    private GremlinGR grModel = new GremlinGR();
 
     private Classifier classifier;
-    private Instances trainInstance;
-    private Instances testInstance;
 
     private String grammarPath;
 
+    private int populationSize;
+    private int noGenerations;
+    private int noElites;
+    private int initialDepth;
+    private int maxDepth;
     private int tournamentSize;
-    private int crossValidationFolds;
+    private int noFolds;
+
+    private double crossoverProbability;
+    private double mutationProbability;
 
     public static void main(String[] args) {
-        runClassifier(new Gremlin(args), args);
-    }
-
-    public Gremlin(String[] args) {
-        grammarPath = "grammar/basic.bnf";
-        tournamentSize = 3;
-        crossValidationFolds = 10;
-
-        grModel.setMaxDepth(5);
-        grModel.setMaxInitialDepth(6);
-
-        grModel.setNoRuns(1);
-        grModel.setNoGenerations(50);
-        grModel.setNoElites(10);
-        grModel.setPopulationSize(100);
-        grModel.setPoolSize(50);
-
-        grModel.setTerminationFitness(1.0);
-        grModel.setCrossoverProbability(0.7);
-        grModel.setReproductionProbability(1.0);
-        grModel.setMutationProbability(0.3);
-
-        classifier = null;
-
-        int trainPathIndex = -1, testPathIndex = -1;
-
-        for(int i = 0; i < args.length; i++) {
-            if(args[i].equals("-t"))
-                trainPathIndex = i + 1;
-            if(args[i].equals("-T"))
-                testPathIndex = i + 1;
-        }
-
-        try {
-            if(trainPathIndex != -1)
-                trainInstance = openInstance(args, trainPathIndex);
-
-            if(testPathIndex != -1)
-                testInstance = openInstance(args, testPathIndex);
-            grModel.setGrammar(openGrammar());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
+        AbstractClassifier.runClassifier(new Gremlin(), args);
     }
 
     @Override
     public void buildClassifier(Instances instances) throws Exception {
-        Life.get().addGenerationListener(new GenerationAdapter() {
-            @Override
-            public void onGenerationEnd() {
-                Stats.get().print(GEN_NUMBER, GEN_FITNESS_MIN, GEN_FITTEST_PROGRAM);
-            }
-        });
+        GeneticProgramming gp = new GeneticProgramming();
 
-        grModel.run();
+        gp.init(instances, grammarPath, populationSize, noGenerations, noElites, initialDepth, maxDepth,
+                crossoverProbability, mutationProbability, tournamentSize, noFolds);
 
-        CandidateProgram candidateProgram = (CandidateProgram) Stats.get().getStat(RUN_FITTEST_PROGRAM);
-        String candidate = candidateProgram.toString();
-//        candidate = completeConfiguration(candidate);
-//
-//        String[] options = null;
-//
-//        try {
-//            options = Utils.splitOptions(candidate);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        assert options != null;
-//        String name = options[0];
-//        options[0] = "";
-//
-//        classifier = forName(name, options);
-//        classifier.buildClassifier(trainInstance);
+        String program = gp.run();
+        program = completeGrammar(program);
 
-        System.out.println(candidate);
-        classifier = new J48();
-        classifier.buildClassifier(trainInstance);
+        String[] options = splitOptions(program);
+        String name = options[0];
+        options[0] = "";
+
+        classifier = AbstractClassifier.forName(name, options);
+        classifier.buildClassifier(instances);
     }
 
     @Override
@@ -183,102 +63,74 @@ public class Gremlin extends AbstractClassifier {
     }
 
     @Override
-    public Enumeration<Option> listOptions() {
-        return super.listOptions();
-    }
-
-    @Override
-    public String[] getOptions() {
-        return super.getOptions();
-    }
-
-    @Override
-    public void setOptions(String[] options) throws Exception {
-        super.setOptions(options);
-    }
-
-    @Override
     public Capabilities getCapabilities() {
         return classifier.getCapabilities();
     }
 
     @Override
-    public String toString() {
-        return classifier.toString();
-    }
+    public void setOptions(String[] options) throws Exception {
+        String auxiliar;
 
-    public Grammar openGrammar() throws IOException {
-        File grammarFile = new File(grammarPath);
-        Grammar grammar = new Grammar(grammarFile);
+        auxiliar = getOption("grammar-path", options);
+        if(auxiliar.length() != 0)
+            grammarPath = auxiliar;
+        else
+            grammarPath = "grammar/grammar.bnf";
 
-        return grammar;
-    }
+        auxiliar = getOption("pop-size", options);
+        if(auxiliar.length() != 0)
+            populationSize = Integer.parseInt(auxiliar);
+        else
+            populationSize = 100;
 
-    public Instances openInstance(String[] args, int index) throws Exception {
-        String dataPath = args[index];
-        DataSource source = new DataSource(dataPath);
-        Instances data = source.getDataSet();
+        auxiliar = getOption("no-generations", options);
+        if(auxiliar.length() != 0)
+            noGenerations = Integer.parseInt(auxiliar);
+        else
+            noGenerations = 50;
 
-        if(data.classIndex() == -1) {
-            data.setClassIndex(data.numAttributes() - 1);
-        }
+        auxiliar = getOption("no-elites", options);
+        if(auxiliar.length() != 0)
+            noElites = Integer.parseInt(auxiliar);
+        else
+            noElites = 10;
 
-        return data;
-    }
+        auxiliar = getOption("initial-depth", options);
+        if(auxiliar.length() != 0)
+            initialDepth = Integer.parseInt(auxiliar);
+        else
+            initialDepth = 4;
 
-    public long getSeed() {
-        return seed;
-    }
+        auxiliar = getOption("max-depth", options);
+        if(auxiliar.length() != 0)
+            maxDepth = Integer.parseInt(auxiliar);
+        else
+            maxDepth = 4;
 
-    public void setSeed(long seed) {
-        this.seed = seed;
-    }
+        auxiliar = getOption("tournament-size", options);
+        if(auxiliar.length() != 0)
+            tournamentSize = Integer.parseInt(auxiliar);
+        else
+            tournamentSize = 3;
 
-    public Classifier getClassifier() {
-        return classifier;
-    }
+        auxiliar = getOption("no-folds", options);
+        if(auxiliar.length() != 0)
+            noFolds = Integer.parseInt(auxiliar);
+        else
+            noFolds = 10;
 
-    public void setClassifier(Classifier classifier) {
-        this.classifier = classifier;
-    }
+        auxiliar = getOption("crossover-prob", options);
+        if(auxiliar.length() != 0)
+            crossoverProbability = Double.parseDouble(auxiliar);
+        else
+            crossoverProbability = 0.7D;
 
-    public Instances getTrainInstance() {
-        return trainInstance;
-    }
+        auxiliar = getOption("mutation-prob", options);
+        if(auxiliar.length() != 0)
+            mutationProbability = Double.parseDouble(auxiliar);
+        else
+            mutationProbability = 0.3D;
 
-    public void setTrainInstance(Instances trainInstance) {
-        this.trainInstance = trainInstance;
-    }
-
-    public Instances getTestInstance() {
-        return testInstance;
-    }
-
-    public void setTestInstance(Instances testInstance) {
-        this.testInstance = testInstance;
-    }
-
-    public String getGrammarPath() {
-        return grammarPath;
-    }
-
-    public void setGrammarPath(String grammarPath) {
-        this.grammarPath = grammarPath;
-    }
-
-    public int getTournamentSize() {
-        return tournamentSize;
-    }
-
-    public void setTournamentSize(int tournamentSize) {
-        this.tournamentSize = tournamentSize;
-    }
-
-    public int getCrossValidationFolds() {
-        return crossValidationFolds;
-    }
-
-    public void setCrossValidationFolds(int crossValidationFolds) {
-        this.crossValidationFolds = crossValidationFolds;
+        super.setOptions(options);
     }
 }

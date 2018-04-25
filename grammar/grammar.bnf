@@ -1,62 +1,20 @@
-<start> ::= <preprocess> | <classification> | <ensemble>
+<start> ::= <classification>
 
-<preprocess> ::= "pre" <AttributeSC> "W" <classification>
+<classification> ::= "base" <baseClassifier>
 
-<classification> ::= "meta" <metaClassifier> "W" <baseClassifier>
-                   | "base" <baseClassifier>
-
-<ensemble> ::= "ensemb" <stackingEnsemble>
-             | "ensemb" <voteEnsemble>
-
-<metaClassifier> ::= <LWL> | <AdaBM1> | <Bagging> | <RandomCom> | <RandomSS>
-
-<baseClassifier> ::= <BayesNet> | <NaiveBayes> | <NaiveBayesMulti> | <Logistic> | <MLP> | <SGD> | <SL> | <SMO> | <VotedP> | <IBk> | <KStar> | <DecisionT> | <JRip> | <OneR> | <PART> | <ZeroR> | <DecisionS> | <J48> | <LMT> | <RandomForest> | <RandomTree> | <REPTree>
-
-<stackingEnsemble> ::= <Stacking> "1C" "B" <baseClassifier>
-                     | <Stacking> "2C" "B" <baseClassifier> "B" <baseClassifier>
-                     | <Stacking> "3C" "B" <baseClassifier> "B" <baseClassifier> "B" <baseClassifier>
-                     | <Stacking> "4C" "B" <baseClassifier> "B" <baseClassifier> "B" <baseClassifier> "B" <baseClassifier>
-                     | <Stacking> "5C" "B" <baseClassifier> "B" <baseClassifier> "B" <baseClassifier> "B" <baseClassifier> "B" <baseClassifier>
-
-<voteEnsemble> ::= <Vote> "1C" "B" <baseClassifier>
-                 | <Vote> "2C" "B" <baseClassifier> "B" <baseClassifier>
-                 | <Vote> "3C" "B" <baseClassifier> "B" <baseClassifier> "B" <baseClassifier>
-                 | <Vote> "4C" "B" <baseClassifier> "B" <baseClassifier> "B" <baseClassifier> "B" <baseClassifier>
-                 | <Vote> "5C" "B" <baseClassifier> "B" <baseClassifier> "B" <baseClassifier> "B" <baseClassifier> "B" <baseClassifier>
-
-<AttributeSC> ::= "AttributeSelectedClassifier" "E" <eval> "S" <search>
-
-<LWL> ::= "LWL" "K" <LWL-KNN> "U" <LWL-weightingKernel>
-<LWL-KNN> ::= "-1" | <LWL-KNN-otherValues>
-<LWL-KNN-otherValues> ::= "-1" | "10" | "30" | "60" | "90" | "120"
-<LWL-weightingKernel> ::= "0" | "1" | "2" | "3" | "4"
-
-<AdaBM1> ::= "AdaBoostM1" "I" <AdaBM1-numIterations> "P" <AdaBM1-weightThreshold> "Q" <AdaBM1-useResampling>
-<AdaBM1-numIterations> ::= "RANDOM_INT [2, 128]"
-<AdaBM1-weightThreshold> ::= "100" | "RANDOM_FLOAT [50, 100]"
-<AdaBM1-useResampling> ::= "TRUE" | "FALSE"
-
-<Bagging> ::= "Bagging" "I" <Bagging-numIterations> "O" <Bagging-calcOutOfBag>
-<Bagging-numIterations> ::= "RANDOM_INT [2, 128]"
-<Bagging-calcOutOfBag> ::= "TRUE" "P" "100" | "FALSE" "P" <Bagging-bagSizePercent>
-<Bagging-bagSizePercent> ::= "RANDOM_INT [10, 100]"
-
-<RandomCom> ::= "RandomCommittee" "I" <RandomCom-numIterations>
-<RandomCom-numIterations> ::= "RANDOM_INT [2, 64]"
-
-<RandomSS> ::= "RandomSubSpace" "I" <RandomSS-numIterations> "P" <RandomSS-subSpaceSize>
-<RandomSS-numIterations> ::= "RANDOM_INT [2, 64]"
-<RandomSS-subSpaceSize> ::= "RANDOM_FLOAT [0.1, 1]"
+<baseClassifier> ::= <BayesNet> | <NaiveBayes> | <NaiveBayesMultinomial> | <Logistic> | <MLP>
+                   | <SL> | <SMO> | <IBk> | <KStar> | <DecisionTable> | <JRip> | <OneR> | <PART> | <ZeroR>
+                   | <DecisionStump> | <J48> | <LMT> | <RandomForest> | <RandomTree> | <REPTree>
 
 <BayesNet> ::= "BayesNet" "D" <BayesNet-useADTree> "Q" <BayesNet-searchAlgorithm>
 <BayesNet-useADTree> ::= "TRUE" | "FALSE"
 <BayesNet-searchAlgorithm> ::= "K2" | "HillClimber" | "LAGDHillClimber" | "SimulatedAnnealing" | "TabuSearch" | "TAN"
 
 <NaiveBayes> ::= "NaiveBayes" "K" <NaiveBayes-useKernelEstimator>
-<NaiveBayes-useSupervisedDiscretization> ::= "TRUE" | "FALSE"
 <NaiveBayes-useKernelEstimator> ::= "TRUE" | "FALSE" "D" <NaiveBayes-useSupervisedDiscretization>
+<NaiveBayes-useSupervisedDiscretization> ::= "TRUE" | "FALSE"
 
-<NaiveBayesMulti> ::= "NaiveBayesMultinomial"
+<NaiveBayesMultinomial> ::= "NaiveBayesMultinomial"
 
 <Logistic> ::= "Logistic" "R" <Logistic-ridge>
 <Logistic-ridge> ::= "RANDOM_FLOAT [1E-12, 10]"
@@ -70,135 +28,35 @@
 <MLP-momentum> ::= "RANDOM_FLOAT [0.1, 1]"
 <MLP-reset> ::= "TRUE" | "FALSE"
 
-<SGD> ::= "SGD" "F" <SGD-lossFunction> "L" <SGD-learningRate> "M" <SGD-dontReplaceMissing> "N" <SGD-dontNormalize> "R" <SGD-lambda>
-<SGD-lossFunction> ::= "0" | "1" | "2"
-<SGD-learningRate> ::= "RANDOM_FLOAT [1E-5, 0.1]"
-<SGD-dontReplaceMissing> ::= "TRUE" | "FALSE"
-<SGD-dontNormalize> ::= "TRUE" | "FALSE"
-<SGD-lambda> ::= "RANDOM_FLOAT [1E-12, 10]"
-
 <SL> ::= "SimpleLogistic" "A" <SL-useAIC> "S" <SL-useCrossValidation> "W" <SL-weightTrimBeta>
 <SL-useAIC> ::= "TRUE" | "FALSE"
 <SL-useCrossValidation> ::= "TRUE" | "FALSE"
 <SL-weightTrimBeta> ::= "0" | "RANDOM_FLOAT [0, 1]"
 
-<SMO> ::= "SMO" "C" <SMO-cost> "K" <SMO-kernel> "M" <SMO-buildCalibrationModels> "N" <SMO-filterType>
-<SMO-cost> ::= "RANDOM_FLOAT [0.5, 1.5]"
-<SMO-kernel> ::= <NormalizedPolyKernel> | <PolyKernel> | <Puk> | <RBFKernel>
-<SMO-buildCalibrationModels> ::= "TRUE" | "FALSE"
-<SMO-filterType> ::= "0" | "1" | "2"
+<SMO> ::= "SMO"
 
-<VotedP> ::= "VotedPerceptron" "E" <VotedP-exponent> "I" <VotedP-numIterations> "M" <VotedP-maxK>
-<VotedP-exponent> ::= "RANDOM_FLOAT [0.2, 5]"
-<VotedP-numIterations> ::= "RANDOM_INT [1, 10]"
-<VotedP-maxK> ::= "RANDOM_INT [5000, 50000]"
+<IBk> ::= "IBk"
 
-<IBk> ::= "IBk" "E" <IBk-meanSquare> "K" <IBk-KNN> "X" <IBk-crossValidate> "IF" <IBk-distanceWeighting>
-<IBk-meanSquare> ::= "TRUE" | "FALSE"
-<IBk-KNN> ::= "RANDOM_INT [1, 64]"
-<IBk-crossValidate> ::= "TRUE" | "FALSE"
-<IBk-distanceWeighting> ::= "I" | "F" | "FALSE"
+<KStar> ::= "KStar"
 
-<KStar> ::= "KStar" "B" <KStar-globalBlend> "E" <KStar-entropicAutoBlend> "M" <KStar-missingMode>
-<KStar-globalBlend> ::= "RANDOM_INT [1, 100]"
-<KStar-entropicAutoBlend> ::=  "TRUE" | "FALSE"
-<KStar-missingMode> ::= "a" | "d" | "m" | "n"
+<DecisionTable> ::= "DecisionTable"
 
-<DecisionT> ::= "DecisionTable" "E" <DecisionT-evaluationMeasure> "I" <DecisionT-useIBk> "S" <search> "X" <DecisionT-crossVal>
-<DecisionT-evaluationMeasure> ::= "acc" | "rmse" | "mae" | "auc"
-<DecisionT-useIBk> ::= "TRUE" | "FALSE"
-<DecisionT-crossVal> ::= "1" | "2" | "3" | "4"
+<JRip> ::= "JRip"
 
-<JRip> ::= "JRip" "E" <JRip-checkErrorRate> "N" <JRip-minNo> "O" <JRip-optimizations> "P" <JRip-usePruning>
-<JRip-checkErrorRate> ::= "TRUE" | "FALSE"
-<JRip-minNo> ::= "RANDOM_FLOAT [1, 5]"
-<JRip-optimizations> ::= "RANDOM_INT [1, 5]"
-<JRip-usePruning> ::= "TRUE" | "FALSE"
+<OneR> ::= "OneR"
 
-<OneR> ::= "OneR" "B" <OneR-minBucketSize>
-<OneR-minBucketSize> ::= "RANDOM_INT [1, 32]"
-
-<PART> ::= "PART" "B" <PART-binarySplits> "M" <PART-minNumObj> "R" <PART-reducedErrorPruning>
-<PART-binarySplits> ::= "TRUE" | "FALSE"
-<PART-minNumObj> ::= "RANDOM_INT [1, 64]"
-<PART-numFolds> ::= "RANDOM_INT [2, 5]"
-<PART-reducedErrorPruning> ::= "TRUE" "N" <PART-numFolds> | "FALSE"
+<PART> ::= "PART"
 
 <ZeroR> ::= "ZeroR"
 
-<DecisionS> ::= "DecisionStump"
+<DecisionStump> ::= "DecisionStump"
 
-<J48> ::= "J48" "A" <J48-useLaplace> "B" <J48-binarySplits>  "J" <J48-useMDLcorrection> "M" <J48-minNumObj> "O" <J48-collapseTree> "U" <J48-unpruned>
-<J48-useLaplace> ::= "TRUE" | "FALSE"
-<J48-binarySplits> ::= "TRUE" | "FALSE"
-<J48-confidenceFactor> ::= "RANDOM_FLOAT [0, 1]"
-<J48-useMDLcorrection> ::= "TRUE" | "FALSE"
-<J48-minNumObj> ::= "RANDOM_INT [1, 64]"
-<J48-collapseTree> ::= "TRUE" | "FALSE"
-<J48-subtreeRaising> ::= "TRUE" | "FALSE"
-<J48-unpruned> ::= "TRUE" | "FALSE" "C" <J48-confidenceFactor> "S" <J48-subtreeRaising>
+<J48> ::= "J48"
 
-<LMT> ::= "LMT" "A" <LMT-useAIC> "B" <LMT-convertNominal> "C" <LMT-fastRegression> "M" <LMT-minNumInstances> "P" <LMT-errorOnProbabilities> "R" <LMT-splitOnResiduals> "W" <LMT-weightTrimBeta>
-<LMT-useAIC> ::= "TRUE" | "FALSE"
-<LMT-convertNominal> ::= "TRUE" | "FALSE"
-<LMT-fastRegression> ::= "TRUE" | "FALSE"
-<LMT-minNumInstances> ::= "RANDOM_INT [1, 64]"
-<LMT-errorOnProbabilities> ::= "TRUE" | "FALSE"
-<LMT-splitOnResiduals> ::= "TRUE" | "FALSE"
-<LMT-weightTrimBeta> ::= "0" | "RANDOM_FLOAT [0, 1]"
+<LMT> ::= "LMT"
 
-<RandomForest> ::= "RandomForest" "I" <RandomForest-numIterations> "K" <RandomForest-numFeatures> "MD" <RandomForest-maxDepth>
-<RandomForest-numIterations> ::= "RANDOM_INT [2, 256]"
-<RandomForest-numFeatures> ::= "0" | "RANDOM_INT [1, 32]"
-<RandomForest-maxDepth> ::= "0" | "RANDOM_INT [1, 20]"
+<RandomForest> ::= "RandomForest"
 
-<RandomTree> ::= "RandomTree" "K" <RandomTree-KValue> "M" <RandomTree-minNum> "N" <RandomTree-numFolds> "U" <RandomTree-allowUnclassifiedInstances> "MD" <RandomTree-maxDepth>
-<RandomTree-KValue> ::= "0" | "RANDOM_INT [2, 32]"
-<RandomTree-minNum> ::= "RANDOM_INT [1, 64]"
-<RandomTree-numFolds> ::= "0" | "RANDOM_INT [2, 5]"
-<RandomTree-allowUnclassifiedInstances> ::= "TRUE" | "FALSE"
-<RandomTree-maxDepth> ::= "0" | "RANDOM_INT [2, 20]"
+<RandomTree> ::= "RandomTree"
 
-<REPTree> ::= "REPTree" "L" <REPTree-maxDepth> "M" <REPTree-minNum> "P" <REPTree-noPruning> "V" <REPTree-minVarianceDrop>
-<REPTree-maxDepth> ::= "-1" | "RANDOM_INT [2, 20]"
-<REPTree-minNum> ::= "RANDOM_INT [1, 64]"
-<REPTree-noPruning> ::= "TRUE" | "FALSE"
-<REPTree-minVarianceDrop> ::= "RANDOM_FLOAT [1E-5, 1E-1]"
-
-<Stacking> ::= "Stacking"
-
-<Vote> ::= "Vote" "R" <Vote-combinationRule>
-<Vote-combinationRule> ::= "AVG" | "PROD" | "MAJ" | "MIN" | "MAX"
-
-<eval> ::= <CfsSE>
-
-<search> ::= <BestFirst> | <GreedyS>
-
-<NormalizedPolyKernel> ::= "E" <NormalizedPolyKernel-exponent> "L" <NormalizedPolyKernel-useLowerOrder>
-<NormalizedPolyKernel-exponent> ::= "RANDOM_FLOAT [0.2, 5]"
-<NormalizedPolyKernel-useLowerOrder> ::= "TRUE" | "FALSE"
-
-<PolyKernel> ::= "E" <PolyKernel-exponent> "L" <PolyKernel-useLowerOrder>
-<PolyKernel-exponent> ::= "RANDOM_FLOAT [0.2, 5]"
-<PolyKernel-useLowerOrder> ::= "TRUE" | "FALSE"
-
-<Puk> ::= "O" <Puk-omega> "S" <Puk-sigma>
-<Puk-omega> ::= "RANDOM_FLOAT [0.1, 1]"
-<Puk-sigma> ::= "RANDOM_FLOAT [0.1, 10]"
-
-<RBFKernel> ::= "G" <RBFKernel-gamma>
-<RBFKernel-gamma> ::= "RANDOM_FLOAT [0.0001, 1]"
-
-<CfsSE> ::= "CfsSubsetEval" "L" <CfsSE-locallyPredictive> "M" <CfsSE-missingSeparate>
-<CfsSE-locallyPredictive> ::= "TRUE" | "FALSE"
-<CfsSE-missingSeparate> ::= "TRUE" | "FALSE"
-
-<BestFirst> ::= "BestFirst" "D" <BestFirst-direction> "N" <BestFirst-searchTerminator>
-<BestFirst-direction> ::= "0" | "1" | "2"
-<BestFirst-searchTerminator> ::= "RANDOM_INT [2, 10]"
-
-<GreedyS> ::= "GreedyStepwise" "B" <GreedyS-searchBackwards> "C" <GreedyS-conservativeForwardSelection> "N" <GreedyS-numToSelect> "R" <GreedyS-generateRanking>
-<GreedyS-searchBackwards> ::= "TRUE" | "FALSE"
-<GreedyS-conservativeForwardSelection> ::= "TRUE" | "FALSE"
-<GreedyS-numToSelect> ::= "RANDOM_INT [10, 1000]"
-<GreedyS-generateRanking> ::= "TRUE" | "FALSE"
+<REPTree> ::= "REPTree"
