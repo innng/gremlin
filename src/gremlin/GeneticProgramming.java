@@ -101,4 +101,11 @@ public class GeneticProgramming {
         return "J48";
     }
 
+    public void updateBestProgram(List<CandidateProgram> population) {
+
+    }
+
+    public double getFitness(CandidateProgram program) {
+        return 0;
+    }
 }
