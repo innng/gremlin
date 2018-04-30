@@ -1,0 +1,15 @@
+<start> ::= <classification>
+
+<classification> ::= <baseClassifier>
+
+<baseClassifier> ::= <J48>
+
+<J48> ::= "weka.classifiers.trees.J48" <J48-binarySplits> <J48-collapseTree> <J48-minNumObj> <J48-unpruned> <J48-useLaplace> <J48-useMDLcorrection>
+<J48-binarySplits> ::= "-B" | ""
+<J48-collapseTree> ::= "-O" | ""
+<J48-confidenceFactor> ::= "-C" "0.5"
+<J48-minNumObj> ::= "-M" "3"
+<J48-subtreeRaising> ::= "-S" | ""
+<J48-unpruned> ::= "-U" | "" <J48-confidenceFactor> <J48-subtreeRaising>
+<J48-useLaplace> ::= "-A" | ""
+<J48-useMDLcorrection> ::= "-J" | ""

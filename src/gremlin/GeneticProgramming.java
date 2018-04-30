@@ -3,6 +3,7 @@ package gremlin;
 import org.epochx.gr.op.crossover.WhighamCrossover;
 import org.epochx.gr.op.init.RampedHalfAndHalfInitialiser;
 import org.epochx.gr.op.mutation.WhighamMutation;
+import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.op.Crossover;
 import org.epochx.op.Initialiser;
 import org.epochx.op.Mutation;
@@ -10,13 +11,19 @@ import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.Grammar;
 import org.epochx.tools.random.MersenneTwisterFast;
 import org.epochx.tools.random.RandomNumberGenerator;
+import weka.classifiers.AbstractClassifier;
 import weka.classifiers.Classifier;
+import weka.classifiers.evaluation.Evaluation;
 import weka.core.Instances;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
+
+import static weka.core.Utils.splitOptions;
 
 public class GeneticProgramming {
 
@@ -46,7 +53,7 @@ public class GeneticProgramming {
     private CandidateProgram bestProgram;
     private double bestFitness;
 
-    private List<Pair> log;
+    private List<Pair<CandidateProgram, Double>> log;
 
     private class Pair<K, V> {
         private K key;
@@ -93,19 +100,77 @@ public class GeneticProgramming {
 
     }
 
-    public String run() {
+    public String run() throws Exception {
         this.bestProgram = null;
         this.bestFitness = 0;
 
-//        return this.bestProgram.toString();
-        return "J48";
+        List<CandidateProgram> population = initialiser.getInitialPopulation();
+        updateBestProgram(population);
+
+        int gen = 1;
+        while(gen <= noGenerations) {
+            
+        }
+
+//        List<CandidateProgram> elitsm = elitsm(population);
+
+        return this.bestProgram.toString();
     }
 
-    public void updateBestProgram(List<CandidateProgram> population) {
+    private void updateBestProgram(List<CandidateProgram> population) throws Exception {
+        for(final CandidateProgram program: population) {
+            final double fitness = getFitness(program);
+            if(fitness > bestFitness) {
+                bestFitness = fitness;
+                bestProgram = program;
 
+                Pair<CandidateProgram, Double> p = new Pair<>(bestProgram, bestFitness);
+                log.add(p);
+            }
+        }
     }
 
-    public double getFitness(CandidateProgram program) {
-        return 0;
+    private double getFitness(CandidateProgram candidateProgram) throws Exception {
+        String program = candidateProgram.toString();
+
+        String[] options = splitOptions(program);
+        String name = options[0];
+        options[0] = "";
+
+        Classifier classifier = AbstractClassifier.forName(name, options);
+
+        if(classifier.getCapabilities().test(instances)) {
+            classifier.buildClassifier(instances);
+
+            Evaluation evaluation = new Evaluation(instances);
+            evaluation.crossValidateModel(classifier, instances, noFolds, new Random(seed));
+
+            double fitness = evaluation.weightedFMeasure();
+
+            if(Double.isNaN(fitness))
+                return 0;
+            else
+                return fitness;
+
+        } else
+            return 0;
+    }
+
+    private void updateFitness(List<CandidateProgram> population) throws Exception {
+        for(int i = 0; i < population.size(); i++) {
+            double fitness = getFitness(population.get(i));
+            ((GRCandidateProgram) population.get(i)).setFitnessValue(fitness);
+        }
+    }
+
+    private List<CandidateProgram> elitsm(List<CandidateProgram> population) throws Exception {
+        List<CandidateProgram> elites = null;
+
+        updateFitness(population);
+
+        Collections.sort(population);
+        elites = new ArrayList<>(population.subList(population.size() - noElites, population.size()));
+
+        return elites;
     }
 }

@@ -426,14 +426,3 @@
 			* subSpaceSize (-P)
 				* ([0.1, 1]; 0.5)
 
-
-## Anotações
-* Alterações no EpochX:
-  1. GrammarLiteral: adicionado espaço entre os literais e já transforma "RANDOM_INT" e "RANDOM_FLOAT" em valores
-  2. GrCandidateProgram:
-      2.1: adicionado setFitness()
-      2.2: if(model == null) dentro do getFitness adicionado
-  3. CandidateProgram: método compareTo() alterado (onde era > foi colocado <)
-  
-* Gramática:
-  1. apenas classificadores base no momento

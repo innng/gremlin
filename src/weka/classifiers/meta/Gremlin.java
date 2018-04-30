@@ -75,25 +75,25 @@ class Gremlin extends AbstractClassifier {
         if(auxiliar.length() != 0)
             grammarPath = auxiliar;
         else
-            grammarPath = "grammar/grammar.bnf";
+            grammarPath = "grammar/hardcode.bnf";
 
         auxiliar = getOption("pop-size", options);
         if(auxiliar.length() != 0)
             populationSize = Integer.parseInt(auxiliar);
         else
-            populationSize = 100;
+            populationSize = 10;
 
         auxiliar = getOption("no-generations", options);
         if(auxiliar.length() != 0)
             noGenerations = Integer.parseInt(auxiliar);
         else
-            noGenerations = 50;
+            noGenerations = 5;
 
         auxiliar = getOption("no-elites", options);
         if(auxiliar.length() != 0)
             noElites = Integer.parseInt(auxiliar);
         else
-            noElites = 10;
+            noElites = 1;
 
         auxiliar = getOption("initial-depth", options);
         if(auxiliar.length() != 0)
@@ -105,7 +105,7 @@ class Gremlin extends AbstractClassifier {
         if(auxiliar.length() != 0)
             maxDepth = Integer.parseInt(auxiliar);
         else
-            maxDepth = 4;
+            maxDepth = 10;
 
         auxiliar = getOption("tournament-size", options);
         if(auxiliar.length() != 0)
