@@ -1,19 +1,21 @@
 package weka.classifiers.meta;
 
-import gremlin.GeneticProgramming;
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.Classifier;
+import weka.classifiers.trees.J48;
 import weka.core.Capabilities;
 import weka.core.Instance;
 import weka.core.Instances;
 
-import static gremlin.grammar.Utils.completeGrammar;
+import gremlin.GeneticProgramming;
+
 import static weka.core.Utils.getOption;
 import static weka.core.Utils.splitOptions;
 
-public class Gremlin extends AbstractClassifier {
+class Gremlin extends AbstractClassifier {
 
-    private static final long serialVersionUID = 337915604324006601L;
+    private static final long serialVersionUID = -8818333754611517391L;
+    private long seed = 123;
 
     private Classifier classifier;
 
@@ -36,13 +38,10 @@ public class Gremlin extends AbstractClassifier {
 
     @Override
     public void buildClassifier(Instances instances) throws Exception {
-        GeneticProgramming gp = new GeneticProgramming();
-
-        gp.init(instances, grammarPath, populationSize, noGenerations, noElites, initialDepth, maxDepth,
-                crossoverProbability, mutationProbability, tournamentSize, noFolds);
+        GeneticProgramming gp = new GeneticProgramming(instances, seed, grammarPath, populationSize, noGenerations,
+                noElites, initialDepth, maxDepth, tournamentSize, noFolds, crossoverProbability, mutationProbability);
 
         String program = gp.run();
-        program = completeGrammar(program);
 
         String[] options = splitOptions(program);
         String name = options[0];
@@ -50,6 +49,7 @@ public class Gremlin extends AbstractClassifier {
 
         classifier = AbstractClassifier.forName(name, options);
         classifier.buildClassifier(instances);
+
     }
 
     @Override
@@ -132,5 +132,85 @@ public class Gremlin extends AbstractClassifier {
             mutationProbability = 0.3D;
 
         super.setOptions(options);
+    }
+
+    public String getGrammarPath() {
+        return grammarPath;
+    }
+
+    public void setGrammarPath(String grammarPath) {
+        this.grammarPath = grammarPath;
+    }
+
+    public int getPopulationSize() {
+        return populationSize;
+    }
+
+    public void setPopulationSize(int populationSize) {
+        this.populationSize = populationSize;
+    }
+
+    public int getNoGenerations() {
+        return noGenerations;
+    }
+
+    public void setNoGenerations(int noGenerations) {
+        this.noGenerations = noGenerations;
+    }
+
+    public int getNoElites() {
+        return noElites;
+    }
+
+    public void setNoElites(int noElites) {
+        this.noElites = noElites;
+    }
+
+    public int getInitialDepth() {
+        return initialDepth;
+    }
+
+    public void setInitialDepth(int initialDepth) {
+        this.initialDepth = initialDepth;
+    }
+
+    public int getMaxDepth() {
+        return maxDepth;
+    }
+
+    public void setMaxDepth(int maxDepth) {
+        this.maxDepth = maxDepth;
+    }
+
+    public int getTournamentSize() {
+        return tournamentSize;
+    }
+
+    public void setTournamentSize(int tournamentSize) {
+        this.tournamentSize = tournamentSize;
+    }
+
+    public int getNoFolds() {
+        return noFolds;
+    }
+
+    public void setNoFolds(int noFolds) {
+        this.noFolds = noFolds;
+    }
+
+    public double getCrossoverProbability() {
+        return crossoverProbability;
+    }
+
+    public void setCrossoverProbability(double crossoverProbability) {
+        this.crossoverProbability = crossoverProbability;
+    }
+
+    public double getMutationProbability() {
+        return mutationProbability;
+    }
+
+    public void setMutationProbability(double mutationProbability) {
+        this.mutationProbability = mutationProbability;
     }
 }

@@ -1,0 +1,111 @@
+
+        List<CandidateProgram> population = initialiser.getInitialPopulation();
+        updateBestProgram(population);
+
+        int generation = 1;
+//        while(generation <= noGenerations) {
+            List<CandidateProgram> newPopulation = null;
+
+            newPopulation = new ArrayList<>(populationSize);
+            newPopulation.addAll(elitsm(population));
+
+            programSelector.setSelectionPool(population);
+
+//            while(newPopulation.size() < populationSize) {
+                final double randomCrossover = rng.nextDouble();
+                final double randomMutation = rng.nextDouble();
+
+
+
+                final CandidateProgram[] children;
+
+//                if(randomCrossover < crossoverProbability) {
+                    children = crossover(population);
+//                }
+//            }
+
+//            generation++;
+//        }
+
+
+        return bestProgram.toString();
+    }
+
+    private double getFitness(CandidateProgram candidateProgram) throws Exception {
+        String program = candidateProgram.toString();
+        program = completeGrammar(program);
+
+        String[] options = splitOptions(program);
+        String name = options[0];
+        options[0] = "";
+
+        Classifier classifier = AbstractClassifier.forName(name, options);
+
+        if(classifier.getCapabilities().test(instances)) {
+            classifier.buildClassifier(instances);
+
+            Evaluation evaluation = new Evaluation(instances);
+            evaluation.crossValidateModel(classifier, instances, noFolds, new Random(System.nanoTime()));
+
+            double fitness = evaluation.weightedFMeasure();
+
+            if(Double.isNaN(fitness))
+                return 0;
+            else
+                return fitness;
+
+        } else
+            return 0;
+    }
+
+    private void updateBestProgram(List<CandidateProgram> population) throws Exception {
+        for(final CandidateProgram program: population) {
+            final double fitness = getFitness(program);
+            if(fitness > bestFitness) {
+                bestFitness = fitness;
+                bestProgram = program;
+
+                Pair p = new Pair(bestProgram, bestFitness);
+                log.add(p);
+            }
+        }
+    }
+
+    private void updateFitness(List<CandidateProgram> population) throws Exception {
+        for(int i = 0; i < population.size(); i++) {
+            double fitness = getFitness(population.get(i));
+            population.get(i).setFitness(fitness);
+        }
+    }
+
+    private List<CandidateProgram> elitsm(List<CandidateProgram> population) throws Exception {
+        List<CandidateProgram> elites = null;
+
+        updateFitness(population);
+
+        Collections.sort(population);
+        elites = new ArrayList<>(population.subList(population.size() - noElites, population.size()));
+
+        return elites;
+    }
+
+    public CandidateProgram[] crossover(List<CandidateProgram> population) {
+        CandidateProgram parent1;
+        CandidateProgram parent2;
+        CandidateProgram[] children;
+
+        parent1 = programSelector.getProgram();
+        parent2 = programSelector.getProgram();
+
+        do {
+            children = crossover.crossover(parent1.clone(), parent2.clone());
+        } while(children == null);
+
+        return children;
+    }
+
+    public void mutation(List<CandidateProgram> population) {
+
+    }
+
+}
