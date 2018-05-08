@@ -1,17 +1,4 @@
 
-
-
-    private List<CandidateProgram> elitsm(List<CandidateProgram> population) throws Exception {
-        List<CandidateProgram> elites = null;
-
-        updateFitness(population);
-
-        Collections.sort(population);
-        elites = new ArrayList<>(population.subList(population.size() - noElites, population.size()));
-
-        return elites;
-    }
-
     public CandidateProgram[] crossover(List<CandidateProgram> population) {
         CandidateProgram parent1;
         CandidateProgram parent2;
@@ -26,9 +13,3 @@
 
         return children;
     }
-
-    public void mutation(List<CandidateProgram> population) {
-
-    }
-
-}

@@ -107,12 +107,43 @@ public class GeneticProgramming {
         List<CandidateProgram> population = initialiser.getInitialPopulation();
         updateBestProgram(population);
 
+        System.out.println(bestFitness + "\t" + bestProgram.toString());
+
         int gen = 1;
         while(gen <= noGenerations) {
-            
-        }
+            List<CandidateProgram> newPopulation = new ArrayList<>(this.populationSize);
 
-//        List<CandidateProgram> elitsm = elitsm(population);
+            newPopulation.addAll(elitism(population));
+
+            while(newPopulation.size() < this.populationSize) {
+                final double randomCrossover = this.rng.nextDouble();
+                final double randomMutation = this.rng.nextDouble();
+
+                if(randomCrossover < this.crossoverProbability) {
+                    final CandidateProgram[] children = crossover(population);
+
+//                   PERGUNTAR QUAL O SENTIDO DE CROSSOVERPROB + MUTATIONPROB
+                    if(randomMutation < this.crossoverProbability + this.mutationProbability) {
+
+                        for(int i = 0; i < children.length; i++) {
+                            children[i] = mutation(children[i]);
+                        }
+                    }
+
+                    for(final CandidateProgram c: children) {
+                        if(newPopulation.size() < populationSize) {
+                            newPopulation.add(c);
+                        }
+                    }
+                }
+            }
+
+            updateBestProgram(newPopulation);
+
+            System.out.println(bestFitness + "\t" + bestProgram.toString());
+
+            gen++;
+        }
 
         return this.bestProgram.toString();
     }
@@ -163,8 +194,8 @@ public class GeneticProgramming {
         }
     }
 
-    private List<CandidateProgram> elitsm(List<CandidateProgram> population) throws Exception {
-        List<CandidateProgram> elites = null;
+    private List<CandidateProgram> elitism(List<CandidateProgram> population) throws Exception {
+        List<CandidateProgram> elites;
 
         updateFitness(population);
 
@@ -172,5 +203,37 @@ public class GeneticProgramming {
         elites = new ArrayList<>(population.subList(population.size() - noElites, population.size()));
 
         return elites;
+    }
+
+    private CandidateProgram tournamentSelector(List<CandidateProgram> population) {
+        List<CandidateProgram> candidates = new ArrayList<>();
+
+        for(int i = 0; i < this.tournamentSize; i++) {
+            int index = (int) Math.round(this.rng.nextDouble() * (population.size() - 1));
+            candidates.add((population.get(index)));
+        }
+
+        Collections.sort(candidates);
+
+        return candidates.get(0);
+    }
+
+    private CandidateProgram[] crossover(List<CandidateProgram> population) {
+        CandidateProgram[] children;
+
+        CandidateProgram parent1 = tournamentSelector(population);
+        CandidateProgram parent2 = tournamentSelector(population);
+
+        children = crossover.crossover(parent1.clone(), parent2.clone());
+
+        return children;
+    }
+
+    private CandidateProgram mutation(CandidateProgram parent) {
+        CandidateProgram child;
+
+        child = mutation.mutate(parent.clone());
+
+        return child;
     }
 }
