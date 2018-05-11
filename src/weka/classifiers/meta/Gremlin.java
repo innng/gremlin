@@ -12,9 +12,13 @@ import gremlin.GeneticProgramming;
 import static weka.core.Utils.getOption;
 import static weka.core.Utils.splitOptions;
 
+/**
+ * Main class to run the Gremlin Classifier.
+ */
 class Gremlin extends AbstractClassifier {
 
     private static final long serialVersionUID = -8818333754611517391L;
+
     private long seed = 123;
 
     private Classifier classifier;
@@ -32,17 +36,35 @@ class Gremlin extends AbstractClassifier {
     private double crossoverProbability;
     private double mutationProbability;
 
+    /**
+     * Main method, used by Weka to run this classifier.
+     * @param args
+     */
     public static void main(String[] args) {
         AbstractClassifier.runClassifier(new Gremlin(), args);
     }
 
+    /**
+     * Builds the classifier.
+     * @param instances
+     * @throws Exception
+     */
     @Override
     public void buildClassifier(Instances instances) throws Exception {
+        /**
+         * Initialises the evolutionary process.
+         */
         GeneticProgramming gp = new GeneticProgramming(instances, seed, grammarPath, populationSize, noGenerations,
                 noElites, initialDepth, maxDepth, tournamentSize, noFolds, crossoverProbability, mutationProbability);
 
+        /**
+         * Run the genetic programming and gets the selected individual.
+         */
         String program = gp.run();
 
+        /**
+         * Splits the individual in name + options to build the classifier.
+         */
         String[] options = splitOptions(program);
         String name = options[0];
         options[0] = "";
@@ -52,21 +74,42 @@ class Gremlin extends AbstractClassifier {
 
     }
 
+    /**
+     * Classifies an instance.
+     * @param instance
+     * @return
+     * @throws Exception
+     */
     @Override
     public double classifyInstance(Instance instance) throws Exception {
         return classifier.classifyInstance(instance);
     }
 
+    /**
+     *
+     * @param instance
+     * @return
+     * @throws Exception
+     */
     @Override
     public double[] distributionForInstance(Instance instance) throws Exception {
         return classifier.distributionForInstance(instance);
     }
 
+    /**
+     * Returns classifier's capabilities.
+     * @return
+     */
     @Override
     public Capabilities getCapabilities() {
         return classifier.getCapabilities();
     }
 
+    /**
+     * Sets Gremlin's special options.
+     * @param options
+     * @throws Exception
+     */
     @Override
     public void setOptions(String[] options) throws Exception {
         String auxiliar;

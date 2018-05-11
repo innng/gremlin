@@ -1,15 +1,1 @@
 
-    public CandidateProgram[] crossover(List<CandidateProgram> population) {
-        CandidateProgram parent1;
-        CandidateProgram parent2;
-        CandidateProgram[] children;
-
-        parent1 = programSelector.getProgram();
-        parent2 = programSelector.getProgram();
-
-        do {
-            children = crossover.crossover(parent1.clone(), parent2.clone());
-        } while(children == null);
-
-        return children;
-    }

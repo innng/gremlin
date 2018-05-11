@@ -3,6 +3,8 @@
 ## Anotações
 * Os parâmetros de um classificador selecionado por outro são antecedidos por --
 * Os parâmetros e o nome de um algoritmo que não é classificador vem dentro de " "
+* Parece que uma variável chamada "validProductions" é negativa em certo momento 
+* Warning no valor alto do pruning, por quê?
 
 ## Melhorias que podem ser adicionadas:
 * Espécies

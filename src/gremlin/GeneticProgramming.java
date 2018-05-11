@@ -25,6 +25,9 @@ import java.util.Random;
 
 import static weka.core.Utils.splitOptions;
 
+/**
+ * Class responsible for creating and running the evolutionary process.
+ */
 public class GeneticProgramming {
 
     private long seed;
@@ -55,6 +58,11 @@ public class GeneticProgramming {
 
     private List<Pair<CandidateProgram, Double>> log;
 
+    /**
+     * Auxiliary class that builds a pair with two generic objects.
+     * @param <K>
+     * @param <V>
+     */
     private class Pair<K, V> {
         private K key;
         private V value;
@@ -73,6 +81,22 @@ public class GeneticProgramming {
         }
     }
 
+    /**
+     * Initialises all necessary values for the execution.
+     * @param instances
+     * @param seed
+     * @param grammarPath
+     * @param populationSize
+     * @param noGenerations
+     * @param noElites
+     * @param initialDepth
+     * @param maxDepth
+     * @param tournamentSize
+     * @param noFolds
+     * @param crossoverProbability
+     * @param mutationProbability
+     * @throws IOException
+     */
     public GeneticProgramming(Instances instances, long seed, String grammarPath, int populationSize, int noGenerations, int noElites,
                               int initialDepth, int maxDepth, int tournamentSize, int noFolds,
                               double crossoverProbability, double mutationProbability) throws IOException {
@@ -100,6 +124,11 @@ public class GeneticProgramming {
 
     }
 
+    /**
+     * Runs the evolutionary process.
+     * @return
+     * @throws Exception
+     */
     public String run() throws Exception {
         this.bestProgram = null;
         this.bestFitness = 0;
@@ -107,7 +136,6 @@ public class GeneticProgramming {
         List<CandidateProgram> population = initialiser.getInitialPopulation();
         updateBestProgram(population);
 
-        System.out.println(bestFitness + "\t" + bestProgram.toString());
 
         int gen = 1;
         while(gen <= noGenerations) {
@@ -122,13 +150,21 @@ public class GeneticProgramming {
                 if(randomCrossover < this.crossoverProbability) {
                     final CandidateProgram[] children = crossover(population);
 
-//                   PERGUNTAR QUAL O SENTIDO DE CROSSOVERPROB + MUTATIONPROB
-                    if(randomMutation < this.crossoverProbability + this.mutationProbability) {
+                    System.out.println("crossover:");
+                    for(int i = 0; i < children.length; i++)
+                        System.out.println(children[i].toString());
+
+                    if(randomMutation < this.mutationProbability) {
 
                         for(int i = 0; i < children.length; i++) {
                             children[i] = mutation(children[i]);
                         }
                     }
+
+                    System.out.println("mutação:");
+                    for(int i = 0; i < children.length; i++)
+                        System.out.println(children[i].toString());
+
 
                     for(final CandidateProgram c: children) {
                         if(newPopulation.size() < populationSize) {
@@ -136,11 +172,10 @@ public class GeneticProgramming {
                         }
                     }
                 }
+
             }
 
             updateBestProgram(newPopulation);
-
-            System.out.println(bestFitness + "\t" + bestProgram.toString());
 
             gen++;
         }
@@ -224,7 +259,13 @@ public class GeneticProgramming {
         CandidateProgram parent1 = tournamentSelector(population);
         CandidateProgram parent2 = tournamentSelector(population);
 
-        children = crossover.crossover(parent1.clone(), parent2.clone());
+        System.out.println("parents:");
+        System.out.println(parent1.toString());
+        System.out.println(parent2.toString());
+
+        do {
+            children = crossover.crossover(parent1.clone(), parent2.clone());
+        }while(children == null);
 
         return children;
     }
@@ -232,7 +273,10 @@ public class GeneticProgramming {
     private CandidateProgram mutation(CandidateProgram parent) {
         CandidateProgram child;
 
-        child = mutation.mutate(parent.clone());
+        do {
+            child = mutation.mutate(parent.clone());
+        }while(child == null);
+
 
         return child;
     }
