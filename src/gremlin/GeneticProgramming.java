@@ -150,21 +150,12 @@ public class GeneticProgramming {
                 if(randomCrossover < this.crossoverProbability) {
                     final CandidateProgram[] children = crossover(population);
 
-                    System.out.println("crossover:");
-                    for(int i = 0; i < children.length; i++)
-                        System.out.println(children[i].toString());
-
                     if(randomMutation < this.mutationProbability) {
 
                         for(int i = 0; i < children.length; i++) {
                             children[i] = mutation(children[i]);
                         }
                     }
-
-                    System.out.println("mutação:");
-                    for(int i = 0; i < children.length; i++)
-                        System.out.println(children[i].toString());
-
 
                     for(final CandidateProgram c: children) {
                         if(newPopulation.size() < populationSize) {
@@ -258,10 +249,6 @@ public class GeneticProgramming {
 
         CandidateProgram parent1 = tournamentSelector(population);
         CandidateProgram parent2 = tournamentSelector(population);
-
-        System.out.println("parents:");
-        System.out.println(parent1.toString());
-        System.out.println(parent2.toString());
 
         do {
             children = crossover.crossover(parent1.clone(), parent2.clone());
