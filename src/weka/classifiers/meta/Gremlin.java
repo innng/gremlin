@@ -9,6 +9,7 @@ import weka.core.Instances;
 
 import gremlin.GeneticProgramming;
 
+import static weka.core.Utils.getFlag;
 import static weka.core.Utils.getOption;
 import static weka.core.Utils.splitOptions;
 
@@ -36,6 +37,8 @@ class Gremlin extends AbstractClassifier {
     private double crossoverProbability;
     private double mutationProbability;
 
+    private boolean printLog;
+
     /**
      * Main method, used by Weka to run this classifier.
      * @param args
@@ -51,6 +54,8 @@ class Gremlin extends AbstractClassifier {
      */
     @Override
     public void buildClassifier(Instances instances) throws Exception {
+        long start = System.nanoTime();
+
         /**
          * Initialises the evolutionary process.
          */
@@ -62,6 +67,8 @@ class Gremlin extends AbstractClassifier {
          */
         String program = gp.run();
 
+        double elapsedTime = (System.nanoTime() - start)/1e9;
+
         /**
          * Splits the individual in name + options to build the classifier.
          */
@@ -72,6 +79,11 @@ class Gremlin extends AbstractClassifier {
         classifier = AbstractClassifier.forName(name, options);
         classifier.buildClassifier(instances);
 
+        for(int i = 0; i < gp.getLog().size(); i++) {
+            System.out.println(gp.getLog().get(i).getValue() + " " + gp.getLog().get(i).getKey().toString());
+        }
+
+        System.out.println(elapsedTime);
     }
 
     /**
@@ -174,7 +186,17 @@ class Gremlin extends AbstractClassifier {
         else
             mutationProbability = 0.3D;
 
+        boolean printLog = getFlag("print-log", options);
+
         super.setOptions(options);
+    }
+
+    /**
+     *
+     * @param time
+     */
+    public void PrintLog(double time) {
+
     }
 
     public String getGrammarPath() {

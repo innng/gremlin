@@ -63,7 +63,7 @@ public class GeneticProgramming {
      * @param <K>
      * @param <V>
      */
-    private class Pair<K, V> {
+    public class Pair<K, V> {
         private K key;
         private V value;
 
@@ -163,7 +163,6 @@ public class GeneticProgramming {
                         }
                     }
                 }
-
             }
 
             updateBestProgram(newPopulation);
@@ -180,11 +179,9 @@ public class GeneticProgramming {
             if(fitness > bestFitness) {
                 bestFitness = fitness;
                 bestProgram = program;
-
-                Pair<CandidateProgram, Double> p = new Pair<>(bestProgram, bestFitness);
-                log.add(p);
             }
         }
+
     }
 
     private double getFitness(CandidateProgram candidateProgram) throws Exception {
@@ -218,6 +215,9 @@ public class GeneticProgramming {
             double fitness = getFitness(population.get(i));
             ((GRCandidateProgram) population.get(i)).setFitnessValue(fitness);
         }
+
+        Pair<CandidateProgram, Double> p = new Pair<>(bestProgram, bestFitness);
+        log.add(p);
     }
 
     private List<CandidateProgram> elitism(List<CandidateProgram> population) throws Exception {
@@ -266,5 +266,9 @@ public class GeneticProgramming {
 
 
         return child;
+    }
+
+    public List<Pair<CandidateProgram, Double>> getLog() {
+        return log;
     }
 }
