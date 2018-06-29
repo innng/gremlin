@@ -2,12 +2,22 @@ package weka.classifiers.meta;
 
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.Classifier;
+import weka.classifiers.evaluation.Evaluation;
 import weka.classifiers.trees.J48;
 import weka.core.Capabilities;
 import weka.core.Instance;
 import weka.core.Instances;
 
+import gremlin.Pair;
 import gremlin.GeneticProgramming;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
 import static weka.core.Utils.getFlag;
 import static weka.core.Utils.getOption;
@@ -77,13 +87,31 @@ class Gremlin extends AbstractClassifier {
         options[0] = "";
 
         classifier = AbstractClassifier.forName(name, options);
+//        classifier = new J48();
         classifier.buildClassifier(instances);
 
-        for(int i = 0; i < gp.getLog().size(); i++) {
-            System.out.println(gp.getLog().get(i).getValue() + " " + gp.getLog().get(i).getKey().toString());
-        }
+        if(printLog)
+            printLog(gp.getLog(), elapsedTime);
 
-        System.out.println(elapsedTime);
+//        Evaluation evaluation = new Evaluation(instances);
+//        evaluation.crossValidateModel(classifier, instances, noFolds, new Random(seed));
+//
+//        double fitness = evaluation.weightedFMeasure();
+//        System.out.println(fitness);
+    }
+
+    /**
+     *
+     */
+    public void printLog(List<Pair<String, Double>> log, double time) throws IOException {
+        PrintWriter writer = new PrintWriter("log.csv", "UTF-8");
+        writer.print("Elapse time: ");
+        writer.println(String.valueOf(time));
+
+        for(int i = 0; i < log.size(); i++)
+            writer.println(i + ", " + log.get(i).getValue() + ", " + log.get(i).getKey());
+
+        writer.close();
     }
 
     /**
@@ -136,13 +164,13 @@ class Gremlin extends AbstractClassifier {
         if(auxiliar.length() != 0)
             populationSize = Integer.parseInt(auxiliar);
         else
-            populationSize = 10;
+            populationSize = 100;
 
         auxiliar = getOption("no-generations", options);
         if(auxiliar.length() != 0)
             noGenerations = Integer.parseInt(auxiliar);
         else
-            noGenerations = 5;
+            noGenerations = 50;
 
         auxiliar = getOption("no-elites", options);
         if(auxiliar.length() != 0)
@@ -186,17 +214,9 @@ class Gremlin extends AbstractClassifier {
         else
             mutationProbability = 0.3D;
 
-        boolean printLog = getFlag("print-log", options);
+        printLog = getFlag("print-log", options);
 
         super.setOptions(options);
-    }
-
-    /**
-     *
-     * @param time
-     */
-    public void PrintLog(double time) {
-
     }
 
     public String getGrammarPath() {
