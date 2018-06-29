@@ -56,30 +56,7 @@ public class GeneticProgramming {
     private CandidateProgram bestProgram;
     private double bestFitness;
 
-    private List<Pair<CandidateProgram, Double>> log;
-
-    /**
-     * Auxiliary class that builds a pair with two generic objects.
-     * @param <K>
-     * @param <V>
-     */
-    public class Pair<K, V> {
-        private K key;
-        private V value;
-
-        private Pair(K key, V value) {
-            this.key = key;
-            this.value = value;
-        }
-
-        public K getKey() {
-            return key;
-        }
-
-        public V getValue() {
-            return value;
-        }
-    }
+    private List<Pair<String, Double>> log;
 
     /**
      * Initialises all necessary values for the execution.
@@ -173,6 +150,11 @@ public class GeneticProgramming {
         return this.bestProgram.toString();
     }
 
+    /**
+     *
+     * @param population
+     * @throws Exception
+     */
     private void updateBestProgram(List<CandidateProgram> population) throws Exception {
         for(final CandidateProgram program: population) {
             final double fitness = getFitness(program);
@@ -182,8 +164,16 @@ public class GeneticProgramming {
             }
         }
 
+        Pair<String, Double> p = new Pair<>(bestProgram.toString(), bestFitness);
+        log.add(p);
     }
 
+    /**
+     *
+     * @param candidateProgram
+     * @return
+     * @throws Exception
+     */
     private double getFitness(CandidateProgram candidateProgram) throws Exception {
         String program = candidateProgram.toString();
 
@@ -210,16 +200,24 @@ public class GeneticProgramming {
             return 0;
     }
 
+    /**
+     *
+     * @param population
+     * @throws Exception
+     */
     private void updateFitness(List<CandidateProgram> population) throws Exception {
         for(int i = 0; i < population.size(); i++) {
             double fitness = getFitness(population.get(i));
             ((GRCandidateProgram) population.get(i)).setFitnessValue(fitness);
         }
-
-        Pair<CandidateProgram, Double> p = new Pair<>(bestProgram, bestFitness);
-        log.add(p);
     }
 
+    /**
+     *
+     * @param population
+     * @return
+     * @throws Exception
+     */
     private List<CandidateProgram> elitism(List<CandidateProgram> population) throws Exception {
         List<CandidateProgram> elites;
 
@@ -231,6 +229,11 @@ public class GeneticProgramming {
         return elites;
     }
 
+    /**
+     *
+     * @param population
+     * @return
+     */
     private CandidateProgram tournamentSelector(List<CandidateProgram> population) {
         List<CandidateProgram> candidates = new ArrayList<>();
 
@@ -244,6 +247,11 @@ public class GeneticProgramming {
         return candidates.get(0);
     }
 
+    /**
+     *
+     * @param population
+     * @return
+     */
     private CandidateProgram[] crossover(List<CandidateProgram> population) {
         CandidateProgram[] children;
 
@@ -257,6 +265,11 @@ public class GeneticProgramming {
         return children;
     }
 
+    /**
+     *
+     * @param parent
+     * @return
+     */
     private CandidateProgram mutation(CandidateProgram parent) {
         CandidateProgram child;
 
@@ -268,7 +281,7 @@ public class GeneticProgramming {
         return child;
     }
 
-    public List<Pair<CandidateProgram, Double>> getLog() {
+    public List<Pair<String, Double>> getLog() {
         return log;
     }
 }
