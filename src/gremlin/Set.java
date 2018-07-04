@@ -5,11 +5,11 @@ package gremlin;
  * @param <K>
  * @param <V>
  */
-public class Pair<K, V> {
+public class Set<K, V> {
     private K key;
     private V value;
 
-    protected Pair(K key, V value) {
+    Set(K key, V value) {
         this.key = key;
         this.value = value;
     }

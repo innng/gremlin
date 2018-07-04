@@ -56,7 +56,7 @@ public class GeneticProgramming {
     private CandidateProgram bestProgram;
     private double bestFitness;
 
-    private List<Pair<String, Double>> log;
+    private List<Set<String, Double>> log;
 
     /**
      * Initialises all necessary values for the execution.
@@ -164,7 +164,7 @@ public class GeneticProgramming {
             }
         }
 
-        Pair<String, Double> p = new Pair<>(bestProgram.toString(), bestFitness);
+        Set<String, Double> p = new Set<>(bestProgram.toString(), bestFitness);
         log.add(p);
     }
 
@@ -281,7 +281,7 @@ public class GeneticProgramming {
         return child;
     }
 
-    public List<Pair<String, Double>> getLog() {
+    public List<Set<String, Double>> getLog() {
         return log;
     }
 }

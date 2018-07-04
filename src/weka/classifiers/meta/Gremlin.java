@@ -8,15 +8,11 @@ import weka.core.Capabilities;
 import weka.core.Instance;
 import weka.core.Instances;
 
-import gremlin.Pair;
+import gremlin.Set;
 import gremlin.GeneticProgramming;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 import static weka.core.Utils.getFlag;
@@ -95,7 +91,7 @@ class Gremlin extends AbstractClassifier {
 
 //        Evaluation evaluation = new Evaluation(instances);
 //        evaluation.crossValidateModel(classifier, instances, noFolds, new Random(seed));
-//
+
 //        double fitness = evaluation.weightedFMeasure();
 //        System.out.println(fitness);
     }
@@ -103,7 +99,7 @@ class Gremlin extends AbstractClassifier {
     /**
      *
      */
-    public void printLog(List<Pair<String, Double>> log, double time) throws IOException {
+    public void printLog(List<Set<String, Double>> log, double time) throws IOException {
         PrintWriter writer = new PrintWriter("log.csv", "UTF-8");
         writer.print("Elapse time: ");
         writer.println(String.valueOf(time));
