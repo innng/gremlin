@@ -18,10 +18,8 @@ import weka.core.Instances;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import static weka.core.Utils.splitOptions;
 
@@ -111,8 +109,14 @@ public class GeneticProgramming {
         this.bestFitness = 0;
 
         List<CandidateProgram> population = initialiser.getInitialPopulation();
-        updateBestProgram(population);
 
+        System.out.println("pop inicial");
+        for (int i = 0; i < population.size(); i++) {
+            System.out.println(getFitness(population.get(i)) + " " + population.get(i).toString() + " " + isValid(population.get(i)));
+        }
+        System.out.println('\n');
+
+        updateBestProgram(population);
 
         int gen = 1;
         while(gen <= noGenerations) {
@@ -128,10 +132,8 @@ public class GeneticProgramming {
                     final CandidateProgram[] children = crossover(population);
 
                     if(randomMutation < this.mutationProbability) {
-
-                        for(int i = 0; i < children.length; i++) {
+                        for(int i = 0; i < children.length; i++)
                             children[i] = mutation(children[i]);
-                        }
                     }
 
                     for(final CandidateProgram c: children) {
@@ -142,7 +144,15 @@ public class GeneticProgramming {
                 }
             }
 
-            updateBestProgram(newPopulation);
+            population = new LinkedList<>(newPopulation);
+
+            System.out.println("pop " + gen);
+            for (int i = 0; i < population.size(); i++) {
+                System.out.println(getFitness(population.get(i)) + " " + population.get(i).toString() + " " + isValid(population.get(i)));
+            }
+            System.out.println('\n');
+
+            updateBestProgram(population);
 
             gen++;
         }
@@ -189,7 +199,7 @@ public class GeneticProgramming {
             Evaluation evaluation = new Evaluation(instances);
             evaluation.crossValidateModel(classifier, instances, noFolds, new Random(seed));
 
-            double fitness = evaluation.weightedFMeasure();
+            double fitness = evaluation.weightedPrecision();
 
             if(Double.isNaN(fitness))
                 return 0;
@@ -255,10 +265,10 @@ public class GeneticProgramming {
     private CandidateProgram[] crossover(List<CandidateProgram> population) {
         CandidateProgram[] children;
 
-        CandidateProgram parent1 = tournamentSelector(population);
-        CandidateProgram parent2 = tournamentSelector(population);
-
         do {
+            CandidateProgram parent1 = tournamentSelector(population);
+            CandidateProgram parent2 = tournamentSelector(population);
+
             children = crossover.crossover(parent1.clone(), parent2.clone());
         }while(children == null);
 
@@ -279,6 +289,10 @@ public class GeneticProgramming {
 
 
         return child;
+    }
+
+    public boolean isValid(CandidateProgram program) throws Exception {
+        return (getFitness(program) != 0 && !Double.isNaN(getFitness(program)));
     }
 
     public List<Set<String, Double>> getLog() {

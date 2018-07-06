@@ -26,7 +26,7 @@ class Gremlin extends AbstractClassifier {
 
     private static final long serialVersionUID = -8818333754611517391L;
 
-    private long seed = 123;
+    private long seed;
 
     private Classifier classifier;
 
@@ -91,9 +91,10 @@ class Gremlin extends AbstractClassifier {
 
 //        Evaluation evaluation = new Evaluation(instances);
 //        evaluation.crossValidateModel(classifier, instances, noFolds, new Random(seed));
-
+//
 //        double fitness = evaluation.weightedFMeasure();
 //        System.out.println(fitness);
+
     }
 
     /**
@@ -150,6 +151,12 @@ class Gremlin extends AbstractClassifier {
     public void setOptions(String[] options) throws Exception {
         String auxiliar;
 
+        auxiliar = getOption("seed", options);
+        if(auxiliar.length() != 0)
+            seed = Integer.parseInt(auxiliar);
+        else
+            seed = 1;
+
         auxiliar = getOption("grammar-path", options);
         if(auxiliar.length() != 0)
             grammarPath = auxiliar;
@@ -160,13 +167,13 @@ class Gremlin extends AbstractClassifier {
         if(auxiliar.length() != 0)
             populationSize = Integer.parseInt(auxiliar);
         else
-            populationSize = 100;
+            populationSize = 10;
 
         auxiliar = getOption("no-generations", options);
         if(auxiliar.length() != 0)
             noGenerations = Integer.parseInt(auxiliar);
         else
-            noGenerations = 50;
+            noGenerations = 2;
 
         auxiliar = getOption("no-elites", options);
         if(auxiliar.length() != 0)
@@ -208,7 +215,7 @@ class Gremlin extends AbstractClassifier {
         if(auxiliar.length() != 0)
             mutationProbability = Double.parseDouble(auxiliar);
         else
-            mutationProbability = 0.3D;
+            mutationProbability = 0.5D;
 
         printLog = getFlag("print-log", options);
 
