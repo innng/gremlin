@@ -7,7 +7,7 @@
 <J48> ::= "weka.classifiers.trees.J48" <J48-binarySplits> <J48-collapseTree> <J48-minNumObj> <J48-unpruned> <J48-useLaplace> <J48-useMDLcorrection>
 <J48-binarySplits> ::= "-B" | " "
 <J48-collapseTree> ::= "-O" | " "
-<J48-confidenceFactor> ::= "-C" "RANDFLOAT(0,1)"
+<J48-confidenceFactor> ::= "-C" "RANDFLOAT(0,0.5)"
 <J48-minNumObj> ::= "-M" "RANDINTEGER(1,64)"
 <J48-subtreeRaising> ::= "-S" | " "
 <J48-unpruned> ::= "-U" | " " <J48-confidenceFactor> <J48-subtreeRaising>

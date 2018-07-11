@@ -1,0 +1,4 @@
+Elapse time: 5.166483987
+0, 0.7262534076093399, weka.classifiers.trees.J48 -B   -M 15 -U     
+1, 0.7262534076093399, weka.classifiers.trees.J48 -B   -M 15 -U     
+2, 0.755971153561515, weka.classifiers.trees.J48 -B -O -M 30   -C 0.21534928039004603   -A   

@@ -3,6 +3,7 @@ package weka.classifiers.meta;
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.Classifier;
 import weka.classifiers.evaluation.Evaluation;
+import weka.classifiers.rules.ZeroR;
 import weka.classifiers.trees.J48;
 import weka.core.Capabilities;
 import weka.core.Instance;
@@ -84,6 +85,7 @@ class Gremlin extends AbstractClassifier {
 
         classifier = AbstractClassifier.forName(name, options);
 //        classifier = new J48();
+//        classifier = new ZeroR();
         classifier.buildClassifier(instances);
 
         if(printLog)
