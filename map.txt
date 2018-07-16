@@ -1,0 +1,193 @@
+* CfsSubsetEval
+	* L:  
+	* M: 
+* BestFirst
+	* D: 
+		(int: 0,2)
+	* N: 
+		(2,10)
+* GreedyStepwise
+	* B: 
+	* C: 
+	* N: 
+		(10,1000)
+	* R: 
+* BayesNet
+	* D:
+	* Q: 
+		(weka.classifiers.bayes.net.search.local.K2,weka.classifiers.bayes.net.search.local.HillClimber,weka.classifiers.bayes.net.search.local.LAGDHillClimber,weka.classifiers.bayes.net.search.local.SimulatedAnnealing,weka.classifiers.bayes.net.search.local.TabuSearch,weka.classifiers.bayes.net.search.local.TAN)
+* NaiveBayes
+	* D:
+	* K:
+* NaiveBayesMultinomial
+* Logistic
+	* R: 
+		(1e-12,10)
+* MultilayerPerceptron
+	* B:
+	* C: 
+	* D:
+	* H:
+		(a,i,o,t)
+	* L:
+		(float: 0.1,1)
+	* M:
+		(float: 0.1,1)
+	* R:
+* SGD
+	* F: 
+		(int: 0,2)
+	* L: 
+		(1e-5,0.1)
+	* M:
+	* N:
+	* R:
+		(1e-12, 10)
+* SimpleLogistic
+	* A:
+	* S:
+	* W: 
+		(0; 0,1)
+* SMO
+	* C: 
+		(0.5,1.5)
+	* K:
+		(weka.classifiers.functions.supportVector.NormalizedPolyKernel,weka.classifiers.functions.supportVector.PolyKernel,weka.classifiers.functions.supportVector.Puk,weka.classifiers.functions.supportVector.RBFKernel)
+	* M:
+	* N: 
+		(int: 0,2)
+* VotedPerceptron
+	* E:
+		(float: 0.2,5)
+	* I:
+		(int: 1,10)
+	* M:
+		(int: 5000,50000)
+* IBk
+	* E:
+	* F:
+	* I:
+	* K:
+		(int: 1,64)
+	* X:
+* KStar
+	* B:
+		(int: 1,100)
+	* E:
+	* M:
+		(a,d,m,n)
+* DecisionTable
+	* E:
+		(acc,rmse,mae,auc)
+	* I:
+	* S:
+		(weka.attributeSelection.BestFirst,weka.attributeSelection.GreedyStepwise)
+	* X:
+		(int: 1,4)
+* JRip
+	* E:
+	* N: 
+		(1,5)
+	* O:
+		(int: 1,5)
+	* P: 
+* OneR
+	* B:
+		(int: 1,32)
+* PART
+	* B:
+	* M: 
+		(int: 1,64)
+	* N:
+		(int: 2,5)
+	* R:
+* ZeroR
+* DecisionStump
+* J48
+	* A: useLaplace (true)
+	* B: binarySplits (true)
+	* C: confidenceFactor (float: 0,1)
+	* J: useMDLcorrection (false)
+	* M: minNumObj (int: 1,64)
+	* O: collapseTree (false)
+	* S: subtreeRaising (false)
+	* U: unpruned (true)
+	* C e S se U false<
+* LMT
+	* A: useAIC (true)
+	* B: convertNominal (true)
+	* C: fastRegression (false)
+	* M: minNumInstances (int: 1,64)
+	* P: errorOnProbabilities (true)
+	* R: splitOnResiduals (true)
+	* W: weightTrimBeta (0; float: 0,1)
+* RandomForest
+	* I: numIterations (int: 2,256)
+	* K: numFeatures (0; int: 1,32)
+	* depth: maxDepth (0; int: 1,20)
+* RandomTree
+	* K: KValue (0; int: 2,32)
+	* M: minNum (int: 1,64)
+	* N: numFolds (0; int: 2,5)
+	* U: allowUnclassifiedInstances (true)
+	*depth: maxDepth (0; int: 2,20)	
+* REPTree
+	* L:
+		(-1; int: 2,20)
+	* M:
+		(int: 1,64)
+	* P:
+	* V:
+		(1e-5, 1e-1)
+* Stacking
+	* R:
+		(avg, prod, maj, min, max)
+* Vote
+	* R:
+		(avg, prod, maj, min, max)	
+* LWL
+	* K:
+		(-1,10,30,60,90,120)
+	* U: 
+		(int: 0,4)
+* AdaBoostM1
+	* I:
+		(int: 2,128)
+	* P:
+		(100; int: 50,100)
+	* Q:
+* AttributeSelectedClassifier
+	* E:
+		(weka.attributeSelection.CfsSubsetEval)
+	* S:
+		(weka.attributeSelection.BestFirst,weka.attributeSelection.GreedyStepwise)
+* Bagging
+	* I:
+		(int: 2,128)
+	* O:
+	* P:
+		(int: 10,100)
+* RandomCommittee
+	* I:
+		(int: 2,64)
+* RandomSubSpace
+	* I: 
+		(int: 2,64)
+	* P:
+		(float: 0.1,1)
+* NormalizedPolyKernel
+	* E:
+		(0.2,5)
+	* L: 
+* PolyKernel
+	* E: 
+		(0.2,5)
+	* L: 
+* Puk
+	* O: 
+		(0.1,1)
+	* S: 
+		(0.1,10)
+* RBF
+	* G: 
+		(1e-4,1)

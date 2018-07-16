@@ -1,0 +1,54 @@
+Elapse time: 270.202811114
+pop: 50
+gen: 50
+0, 0.7238394109352492, weka.classifiers.trees.J48 -B -O -M 10   -C 0.39165723945666603 -S -A -J 
+1, 0.7238394109352492, weka.classifiers.trees.J48 -B -O -M 10   -C 0.39165723945666603 -S -A -J 
+2, 0.7238394109352492, weka.classifiers.trees.J48 -B -O -M 10   -C 0.39165723945666603 -S -A -J 
+3, 0.7238394109352492, weka.classifiers.trees.J48 -B -O -M 10   -C 0.39165723945666603 -S -A -J 
+4, 0.7238394109352492, weka.classifiers.trees.J48 -B -O -M 10   -C 0.39165723945666603 -S -A -J 
+5, 0.7238394109352492, weka.classifiers.trees.J48 -B -O -M 10   -C 0.39165723945666603 -S -A -J 
+6, 0.7238394109352492, weka.classifiers.trees.J48 -B -O -M 10   -C 0.39165723945666603 -S -A -J 
+7, 0.7238394109352492, weka.classifiers.trees.J48 -B -O -M 10   -C 0.39165723945666603 -S -A -J 
+8, 0.7238394109352492, weka.classifiers.trees.J48 -B -O -M 10   -C 0.39165723945666603 -S -A -J 
+9, 0.7238394109352492, weka.classifiers.trees.J48 -B -O -M 10   -C 0.39165723945666603 -S -A -J 
+10, 0.7238394109352492, weka.classifiers.trees.J48 -B -O -M 10   -C 0.39165723945666603 -S -A -J 
+11, 0.7238394109352492, weka.classifiers.trees.J48 -B -O -M 10   -C 0.39165723945666603 -S -A -J 
+12, 0.7238394109352492, weka.classifiers.trees.J48 -B -O -M 10   -C 0.39165723945666603 -S -A -J 
+13, 0.7238394109352492, weka.classifiers.trees.J48 -B -O -M 10   -C 0.39165723945666603 -S -A -J 
+14, 0.7238394109352492, weka.classifiers.trees.J48 -B -O -M 10   -C 0.39165723945666603 -S -A -J 
+15, 0.7238394109352492, weka.classifiers.trees.J48 -B -O -M 10   -C 0.39165723945666603 -S -A -J 
+16, 0.7238394109352492, weka.classifiers.trees.J48 -B -O -M 10   -C 0.39165723945666603 -S -A -J 
+17, 0.7238394109352492, weka.classifiers.trees.J48 -B -O -M 10   -C 0.39165723945666603 -S -A -J 
+18, 0.7238394109352492, weka.classifiers.trees.J48 -B -O -M 10   -C 0.39165723945666603 -S -A -J 
+19, 0.7238394109352492, weka.classifiers.trees.J48 -B -O -M 10   -C 0.39165723945666603 -S -A -J 
+20, 0.7238394109352492, weka.classifiers.trees.J48 -B -O -M 10   -C 0.39165723945666603 -S -A -J 
+21, 0.7291640177220555, weka.classifiers.trees.J48 -B   -M 21 -U -A -J 
+22, 0.7291640177220555, weka.classifiers.trees.J48 -B   -M 21 -U -A -J 
+23, 0.7291640177220555, weka.classifiers.trees.J48 -B   -M 21 -U -A -J 
+24, 0.7291640177220555, weka.classifiers.trees.J48 -B   -M 21 -U -A -J 
+25, 0.7291640177220555, weka.classifiers.trees.J48 -B   -M 21 -U -A -J 
+26, 0.7291640177220555, weka.classifiers.trees.J48 -B   -M 21 -U -A -J 
+27, 0.7291640177220555, weka.classifiers.trees.J48 -B   -M 21 -U -A -J 
+28, 0.7291640177220555, weka.classifiers.trees.J48 -B   -M 21 -U -A -J 
+29, 0.7291640177220555, weka.classifiers.trees.J48 -B   -M 21 -U -A -J 
+30, 0.7291640177220555, weka.classifiers.trees.J48 -B   -M 21 -U -A -J 
+31, 0.7291640177220555, weka.classifiers.trees.J48 -B   -M 21 -U -A -J 
+32, 0.7291640177220555, weka.classifiers.trees.J48 -B   -M 21 -U -A -J 
+33, 0.7291640177220555, weka.classifiers.trees.J48 -B   -M 21 -U -A -J 
+34, 0.7291640177220555, weka.classifiers.trees.J48 -B   -M 21 -U -A -J 
+35, 0.7304329935471803, weka.classifiers.trees.J48 -B   -M 23   -C 0.45050230559571175 -S -A -J 
+36, 0.7304329935471803, weka.classifiers.trees.J48 -B   -M 23   -C 0.45050230559571175 -S -A -J 
+37, 0.7304329935471803, weka.classifiers.trees.J48 -B   -M 23   -C 0.45050230559571175 -S -A -J 
+38, 0.7304329935471803, weka.classifiers.trees.J48 -B   -M 23   -C 0.45050230559571175 -S -A -J 
+39, 0.7304329935471803, weka.classifiers.trees.J48 -B   -M 23   -C 0.45050230559571175 -S -A -J 
+40, 0.7304329935471803, weka.classifiers.trees.J48 -B   -M 23   -C 0.45050230559571175 -S -A -J 
+41, 0.7304329935471803, weka.classifiers.trees.J48 -B   -M 23   -C 0.45050230559571175 -S -A -J 
+42, 0.7304329935471803, weka.classifiers.trees.J48 -B   -M 23   -C 0.45050230559571175 -S -A -J 
+43, 0.7304329935471803, weka.classifiers.trees.J48 -B   -M 23   -C 0.45050230559571175 -S -A -J 
+44, 0.7304329935471803, weka.classifiers.trees.J48 -B   -M 23   -C 0.45050230559571175 -S -A -J 
+45, 0.7304329935471803, weka.classifiers.trees.J48 -B   -M 23   -C 0.45050230559571175 -S -A -J 
+46, 0.7304329935471803, weka.classifiers.trees.J48 -B   -M 23   -C 0.45050230559571175 -S -A -J 
+47, 0.7304329935471803, weka.classifiers.trees.J48 -B   -M 23   -C 0.45050230559571175 -S -A -J 
+48, 0.7304329935471803, weka.classifiers.trees.J48 -B   -M 23   -C 0.45050230559571175 -S -A -J 
+49, 0.7304329935471803, weka.classifiers.trees.J48 -B   -M 23   -C 0.45050230559571175 -S -A -J 
+50, 0.7304329935471803, weka.classifiers.trees.J48 -B   -M 23   -C 0.45050230559571175 -S -A -J 
