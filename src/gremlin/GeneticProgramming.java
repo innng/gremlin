@@ -91,7 +91,7 @@ public class GeneticProgramming {
 
         this.grammar = new Grammar(new File(this.grammarPath));
         this.rng = new MersenneTwisterFast(this.seed);
-        this.initialiser = new RampedHalfAndHalfInitialiser(this.rng, this.grammar, this.populationSize, this.initialDepth, this.maxDepth, true);
+        this.initialiser = new RampedHalfAndHalfInitialiser(this.rng, this.grammar, this.populationSize, this.initialDepth, this.maxDepth, false);
         this.crossover = new WhighamCrossover(this.rng);
         this.mutation = new WhighamMutation(this.rng);
 
@@ -110,11 +110,11 @@ public class GeneticProgramming {
 
         List<CandidateProgram> population = initialiser.getInitialPopulation();
 
-        System.out.println("pop inicial");
-        for (int i = 0; i < population.size(); i++) {
-            System.out.println(getFitness(population.get(i)) + " " + population.get(i).toString() + " " + isValid(population.get(i)));
-        }
-        System.out.println('\n');
+//        System.out.println("pop inicial");
+//        for (int i = 0; i < population.size(); i++) {
+//            System.out.println(getFitness(population.get(i)) + " " + population.get(i).toString() + " " + isValid(population.get(i)));
+//        }
+//        System.out.println('\n');
 
         updateBestProgram(population);
 
@@ -146,11 +146,11 @@ public class GeneticProgramming {
 
             population = new LinkedList<>(newPopulation);
 
-            System.out.println("pop " + gen);
-            for (int i = 0; i < population.size(); i++) {
-                System.out.println(getFitness(population.get(i)) + " " + population.get(i).toString() + " " + isValid(population.get(i)));
-            }
-            System.out.println('\n');
+//            System.out.println("pop " + gen);
+//            for (int i = 0; i < population.size(); i++) {
+//                System.out.println(getFitness(population.get(i)) + " " + population.get(i).toString() + " " + isValid(population.get(i)));
+//            }
+//            System.out.println('\n');
 
             updateBestProgram(population);
 
@@ -199,7 +199,7 @@ public class GeneticProgramming {
             Evaluation evaluation = new Evaluation(instances);
             evaluation.crossValidateModel(classifier, instances, noFolds, new Random(seed));
 
-            double fitness = evaluation.weightedPrecision();
+            double fitness = evaluation.weightedFMeasure();
 
             if(Double.isNaN(fitness))
                 return 0;

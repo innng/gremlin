@@ -90,13 +90,6 @@ class Gremlin extends AbstractClassifier {
 
         if(printLog)
             printLog(gp.getLog(), elapsedTime);
-
-//        Evaluation evaluation = new Evaluation(instances);
-//        evaluation.crossValidateModel(classifier, instances, noFolds, new Random(seed));
-//
-//        double fitness = evaluation.weightedFMeasure();
-//        System.out.println(fitness);
-
     }
 
     /**
@@ -106,6 +99,8 @@ class Gremlin extends AbstractClassifier {
         PrintWriter writer = new PrintWriter("log.csv", "UTF-8");
         writer.print("Elapse time: ");
         writer.println(String.valueOf(time));
+        writer.println("pop: " + String.valueOf(populationSize));
+        writer.println("gen: " + String.valueOf(noGenerations));
 
         for(int i = 0; i < log.size(); i++)
             writer.println(i + ", " + log.get(i).getValue() + ", " + log.get(i).getKey());
@@ -169,13 +164,13 @@ class Gremlin extends AbstractClassifier {
         if(auxiliar.length() != 0)
             populationSize = Integer.parseInt(auxiliar);
         else
-            populationSize = 10;
+            populationSize = 50;
 
-        auxiliar = getOption("no-generations", options);
+        auxiliar = getOption("generations", options);
         if(auxiliar.length() != 0)
             noGenerations = Integer.parseInt(auxiliar);
         else
-            noGenerations = 2;
+            noGenerations = 50;
 
         auxiliar = getOption("no-elites", options);
         if(auxiliar.length() != 0)
@@ -199,7 +194,7 @@ class Gremlin extends AbstractClassifier {
         if(auxiliar.length() != 0)
             tournamentSize = Integer.parseInt(auxiliar);
         else
-            tournamentSize = 3;
+            tournamentSize = 5;
 
         auxiliar = getOption("no-folds", options);
         if(auxiliar.length() != 0)
@@ -211,13 +206,13 @@ class Gremlin extends AbstractClassifier {
         if(auxiliar.length() != 0)
             crossoverProbability = Double.parseDouble(auxiliar);
         else
-            crossoverProbability = 0.7D;
+            crossoverProbability = 0.9D;
 
         auxiliar = getOption("mutation-prob", options);
         if(auxiliar.length() != 0)
             mutationProbability = Double.parseDouble(auxiliar);
         else
-            mutationProbability = 0.5D;
+            mutationProbability = 0.6D;
 
         printLog = getFlag("print-log", options);
 
