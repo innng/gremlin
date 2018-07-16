@@ -1,0 +1,62 @@
+<start> ::= <classification>
+
+<classification> ::= "base" <baseClassifier>
+
+<baseClassifier> ::= <BayesNet> | <NaiveBayes> | <NaiveBayesMultinomial> | <Logistic> | <MLP>
+                   | <SL> | <SMO> | <IBk> | <KStar> | <DecisionTable> | <JRip> | <OneR> | <PART> | <ZeroR>
+                   | <DecisionStump> | <J48> | <LMT> | <RandomForest> | <RandomTree> | <REPTree>
+
+<BayesNet> ::= "BayesNet" "D" <BayesNet-useADTree> "Q" <BayesNet-searchAlgorithm>
+<BayesNet-useADTree> ::= "TRUE" | "FALSE"
+<BayesNet-searchAlgorithm> ::= "K2" | "HillClimber" | "LAGDHillClimber" | "SimulatedAnnealing" | "TabuSearch" | "TAN"
+
+<NaiveBayes> ::= "NaiveBayes" "K" <NaiveBayes-useKernelEstimator>
+<NaiveBayes-useKernelEstimator> ::= "TRUE" | "FALSE" "D" <NaiveBayes-useSupervisedDiscretization>
+<NaiveBayes-useSupervisedDiscretization> ::= "TRUE" | "FALSE"
+
+<NaiveBayesMultinomial> ::= "NaiveBayesMultinomial"
+
+<Logistic> ::= "Logistic" "R" <Logistic-ridge>
+<Logistic-ridge> ::= "RANDOM_FLOAT [1E-12, 10]"
+
+<MLP> ::= "MultilayerPerceptron" "B" <MLP-nominalToBinaryFilter> "C" <MLP-normalizeNumericClass> "D" <MLP-decay> "H" <MLP-hiddenLayers> "L" <MLP-learningRate> "M" <MLP-momentum> "R" <MLP-reset>
+<MLP-nominalToBinaryFilter> ::= "TRUE" | "FALSE"
+<MLP-normalizeNumericClass> ::= "TRUE" | "FALSE"
+<MLP-decay> ::= "TRUE" | "FALSE"
+<MLP-hiddenLayers> ::= "a" | "i" | "o" | "t"
+<MLP-learningRate> ::= "RANDOM_FLOAT [0.1, 1]"
+<MLP-momentum> ::= "RANDOM_FLOAT [0.1, 1]"
+<MLP-reset> ::= "TRUE" | "FALSE"
+
+<SL> ::= "SimpleLogistic" "A" <SL-useAIC> "S" <SL-useCrossValidation> "W" <SL-weightTrimBeta>
+<SL-useAIC> ::= "TRUE" | "FALSE"
+<SL-useCrossValidation> ::= "TRUE" | "FALSE"
+<SL-weightTrimBeta> ::= "0" | "RANDOM_FLOAT [0, 1]"
+
+<SMO> ::= "SMO"
+
+<IBk> ::= "IBk"
+
+<KStar> ::= "KStar"
+
+<DecisionTable> ::= "DecisionTable"
+
+<JRip> ::= "JRip"
+
+<OneR> ::= "OneR"
+
+<PART> ::= "PART"
+
+<ZeroR> ::= "ZeroR"
+
+<DecisionStump> ::= "DecisionStump"
+
+<J48> ::= "J48"
+
+<LMT> ::= "LMT"
+
+<RandomForest> ::= "RandomForest"
+
+<RandomTree> ::= "RandomTree"
+
+<REPTree> ::= "REPTree"

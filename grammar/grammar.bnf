@@ -1,62 +1,108 @@
-<start> ::= <classification>
+<start> ::= <preClassification> | <classification> | <ensemble>
 
-<classification> ::= "base" <baseClassifier>
+<preClassification> ::= <AttributeSelectedClassifier>
 
-<baseClassifier> ::= <BayesNet> | <NaiveBayes> | <NaiveBayesMultinomial> | <Logistic> | <MLP>
-                   | <SL> | <SMO> | <IBk> | <KStar> | <DecisionTable> | <JRip> | <OneR> | <PART> | <ZeroR>
-                   | <DecisionStump> | <J48> | <LMT> | <RandomForest> | <RandomTree> | <REPTree>
+<ensemble> ::= <Stacking> | <Vote>
 
-<BayesNet> ::= "BayesNet" "D" <BayesNet-useADTree> "Q" <BayesNet-searchAlgorithm>
-<BayesNet-useADTree> ::= "TRUE" | "FALSE"
-<BayesNet-searchAlgorithm> ::= "K2" | "HillClimber" | "LAGDHillClimber" | "SimulatedAnnealing" | "TabuSearch" | "TAN"
+<classification> ::= <baseClassifier> | <metaClassifier>
 
-<NaiveBayes> ::= "NaiveBayes" "K" <NaiveBayes-useKernelEstimator>
-<NaiveBayes-useKernelEstimator> ::= "TRUE" | "FALSE" "D" <NaiveBayes-useSupervisedDiscretization>
-<NaiveBayes-useSupervisedDiscretization> ::= "TRUE" | "FALSE"
+<baseClassifier> ::= <BayesNet> | <NaiveBayes> | <NaiveBayesMultinomial> | <Logistic> | <MultilayerPerceptron> | <SGD> | <SimpleLogistic> | <SMO> | <VotedPerceptron> | <IBk> | <KStar> | <DecisionTable> | <JRip> | <OneR> | <PART> | <ZeroR> | <DecisionStump> | <J48> | <LMT> | <RandomForest> | <RandomTree> | <REPTree>
 
-<NaiveBayesMultinomial> ::= "NaiveBayesMultinomial"
+<metaClassifier> ::= <LWL> | <AdaBoostM1> | <Bagging> | <RandomCommittee> | <RandomSubSpace>
 
-<Logistic> ::= "Logistic" "R" <Logistic-ridge>
-<Logistic-ridge> ::= "RANDOM_FLOAT [1E-12, 10]"
+<AttributeSelectedClassifier> ::=
 
-<MLP> ::= "MultilayerPerceptron" "B" <MLP-nominalToBinaryFilter> "C" <MLP-normalizeNumericClass> "D" <MLP-decay> "H" <MLP-hiddenLayers> "L" <MLP-learningRate> "M" <MLP-momentum> "R" <MLP-reset>
-<MLP-nominalToBinaryFilter> ::= "TRUE" | "FALSE"
-<MLP-normalizeNumericClass> ::= "TRUE" | "FALSE"
-<MLP-decay> ::= "TRUE" | "FALSE"
-<MLP-hiddenLayers> ::= "a" | "i" | "o" | "t"
-<MLP-learningRate> ::= "RANDOM_FLOAT [0.1, 1]"
-<MLP-momentum> ::= "RANDOM_FLOAT [0.1, 1]"
-<MLP-reset> ::= "TRUE" | "FALSE"
+<Stacking> ::=
 
-<SL> ::= "SimpleLogistic" "A" <SL-useAIC> "S" <SL-useCrossValidation> "W" <SL-weightTrimBeta>
-<SL-useAIC> ::= "TRUE" | "FALSE"
-<SL-useCrossValidation> ::= "TRUE" | "FALSE"
-<SL-weightTrimBeta> ::= "0" | "RANDOM_FLOAT [0, 1]"
+<Vote> ::=
 
-<SMO> ::= "SMO"
+<BayesNet> ::=
 
-<IBk> ::= "IBk"
+<NaiveBayes> ::=
 
-<KStar> ::= "KStar"
+<NaiveBayesMultinomial> ::=
 
-<DecisionTable> ::= "DecisionTable"
+<Logistic> ::=
 
-<JRip> ::= "JRip"
+<MultilayerPerceptron> ::=
 
-<OneR> ::= "OneR"
+<SGD> ::=
 
-<PART> ::= "PART"
+<SimpleLogistic> ::=
 
-<ZeroR> ::= "ZeroR"
+<SMO> ::=
 
-<DecisionStump> ::= "DecisionStump"
+<VotedPerceptron> ::=
 
-<J48> ::= "J48"
+<IBk> ::=
 
-<LMT> ::= "LMT"
+<KStar> ::=
 
-<RandomForest> ::= "RandomForest"
+<DecisionTable> ::=
 
-<RandomTree> ::= "RandomTree"
+<JRip> ::=
 
-<REPTree> ::= "REPTree"
+<OneR> ::=
+
+<PART> ::=
+
+<ZeroR> ::=
+
+<DecisionStump> ::= ""
+
+<J48> ::= <J48-useLaplace> <J48-binarySplits> <J48-useMDLcorrection> <J48-minNumObj> <J48-collapseTree> <J48-unpruned>
+<J48-useLaplace> ::= "TRUE" | "FALSE"
+<J48-binarySplits> ::= "TRUE" | "FALSE"
+<J48-confidenceFactor> ::= "RANDFLOAT(0,1)"
+<J48-useMDLcorrection> ::= "TRUE" | "FALSE"
+<J48-minNumObj> ::= "RANDINTEGER(1,64)"
+<J48-collapseTree> ::= "TRUE" | "FALSE"
+<J48-subtreeRaising> ::= "TRUE" | "FALSE"
+<J48-unpruned> ::= "TRUE" | "FALSE" <J48-confidenceFactor> <J48-subtreeRaising>
+
+<LMT> ::= <LMT-useAIC> <LMT-convertNominal> <LMT-fastRegression> <LMT-minNumInstances> <LMT-errorOnProbabilities> <LMT-splitOnResiduals> <LMT-weightTrimBeta>
+<LMT-useAIC> ::= "TRUE" | "FALSE"
+<LMT-convertNominal> ::= "TRUE" | "FALSE"
+<LMT-fastRegression> ::= "TRUE" | "FALSE"
+<LMT-minNumInstances> ::= "RANDINTEGER(1,64)"
+<LMT-errorOnProbabilities> ::= "TRUE" | "FALSE"
+<LMT-splitOnResiduals> ::= "TRUE" | "FALSE"
+<LMT-weightTrimBeta> ::= "0" | "RANDFLOAT(0,1)"
+
+<RandomForest> ::= <RandomForest-numIterations> <RandomForest-numFeatures> <RandomForest-maxDepth>
+<RandomForest-numIterations> ::= "RANDINTEGER(2,256)"
+<RandomForest-numFeatures> ::= "0" | "RANDINTEGER(1,32)"
+<RandomForest-maxDepth> ::= "0" | "RANDINTEGER(1,20)"
+
+<RandomTree> ::= <RandomTree-KValue> <RandomTree-minNum> <RandomTree-numFolds> <RandomTree-allowUnclassifiedInstances> <RandomTree-maxDepth>
+<RandomTree-KValue> ::= "0" | "RANDINTEGER(2,32)"
+<RandomTree-minNum> ::= "RANDINTEGER(1,64)"
+<RandomTree-numFolds> ::= "0" | "RANDINTEGER(2,5)"
+<RandomTree-allowUnclassifiedInstances> ::= "TRUE" | "FALSE"
+<RandomTree-maxDepth> ::= "0" | "RANDINTEGER(2,20)"
+
+<REPTree> ::=
+
+<LWL> ::=
+
+<AdaBoostM1> ::=
+
+<Bagging> ::=
+
+<RandomCommittee> ::=
+
+<RandomSubSpace> ::=
+
+<CfsSubsetEval> ::=
+
+<BestFirst> ::=
+
+<GreedyStepwise> ::=
+
+<NormalizedPolyKernel> ::=
+
+<PolyKernel> ::=
+
+<Puk> ::=
+
+<RBF> ::=
