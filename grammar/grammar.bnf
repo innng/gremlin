@@ -1,50 +1,99 @@
 <start> ::= <preClassification> | <classification> | <ensemble>
 
-<preClassification> ::= <AttributeSelectedClassifier>
+<preClassification> ::= <AttributeSelectedClassifier> <classification>
 
 <ensemble> ::= <Stacking> | <Vote>
 
-<classification> ::= <baseClassifier> | <metaClassifier>
+<classification> ::= <baseClassifier> | <metaClassifier> <baseClassifier>
 
 <baseClassifier> ::= <BayesNet> | <NaiveBayes> | <NaiveBayesMultinomial> | <Logistic> | <MultilayerPerceptron> | <SGD> | <SimpleLogistic> | <SMO> | <VotedPerceptron> | <IBk> | <KStar> | <DecisionTable> | <JRip> | <OneR> | <PART> | <ZeroR> | <DecisionStump> | <J48> | <LMT> | <RandomForest> | <RandomTree> | <REPTree>
 
-<metaClassifier> ::= <LWL> | <AdaBoostM1> | <Bagging> | <RandomCommittee> | <RandomSubSpace>
+<metaClassifier> ::= <LWL> | <AdaBoostM1> | <Bagging> | <RandomComittee> | <RandomSubSpace>
 
-<AttributeSelectedClassifier> ::=
+<AttributeSelectedClassifier> ::= <AttributeSelectedClassifier-evaluator> <AttributeSelectedClassifier-search>
+<AttributeSelectedClassifier-evaluator> ::= <CfsSubsetEval>
+<AttributeSelectedClassifier-search> ::= <BestFirst> | <GreedyStepwise>
 
 <Stacking> ::=
 
-<Vote> ::=
+<Vote> ::= <Vote-combinationRules>
+<Vote-combinationRules> ::= "avg" | "prod" | "maj" | "min" | "max"
 
-<BayesNet> ::=
+<BayesNet> ::= <BayesNet-useADTree> <BayesNet-searchAlgorithm>
+<BayesNet-useADTree> ::= "TRUE" | "FALSE"
+<BayesNet-searchAlgorithm> ::= "K2" | "HillClimber" | "SimulatedAnnealing" | "TabuSearch" | "TAN"
 
-<NaiveBayes> ::=
+<NaiveBayes> ::= <NaiveBayes-useSupervisedDiscretization>
+<NaiveBayes-useSupervisedDiscretization> ::= "TRUE" | "FALSE" <NaiveBayes-useKernelEstimator>
+<NaiveBayes-useKernelEstimator> ::= "TRUE" | "FALSE"
 
 <NaiveBayesMultinomial> ::=
 
-<Logistic> ::=
+<Logistic> ::= <Logistic-ridge>
+<Logistic-ridge> ::= "RANDFLOAT(1E-12,10)"
 
-<MultilayerPerceptron> ::=
+<MultilayerPerceptron> ::= <MultilayerPerceptron-nominalToBinaryFilter> <MultilayerPerceptron-normalizeNumericClass> <MultilayerPerceptron-decay> <MultilayerPerceptron-hiddenLayers> <MultilayerPerceptron-learningRate> <MultilayerPerceptron-momentum> <MultilayerPerceptron-reset>
+<MultilayerPerceptron-nominalToBinaryFilter> ::= "TRUE" | "FALSE"
+<MultilayerPerceptron-normalizeNumericClass> ::= "TRUE" | "FALSE"
+<MultilayerPerceptron-decay> ::= "TRUE" | "FALSE"
+<MultilayerPerceptron-hiddenLayers> ::= "a" | "i" | "o" | "t"
+<MultilayerPerceptron-learningRate> ::= "RANDFLOAT(0.1,1)"
+<MultilayerPerceptron-momentum> ::= "RANDFLOAT(0.1,1)"
+<MultilayerPerceptron-reset> ::= "TRUE" | "FALSE"
 
-<SGD> ::=
+<SGD> ::= <SGD-lossFunction> <SGD-learningRate> <SGD-dontReplaceMissing> <SGD-dontNormalize> <SGD-lambda>
+<SGD-lossFunction> ::= "RANDINTEGER(0,2)"
+<SGD-learningRate> ::= "RANDFLOAT(1E-5,0.1)"
+<SGD-dontReplaceMissing> ::= "TRUE" | "FALSE"
+<SGD-dontNormalize> ::= "TRUE" | "FALSE"
+<SGD-lambda> ::= "RANDFLOAT(1E-12,10)"
 
-<SimpleLogistic> ::=
+<SimpleLogistic> ::= <SimpleLogistic-useAIC> <SimpleLogistic-useCrossValidation> <SimpleLogistic-weightTrimBeta>
+<SimpleLogistic-useAIC> ::= "TRUE" | "FALSE"
+<SimpleLogistic-useCrossValidation> ::= "TRUE" | "FALSE"
+<SimpleLogistic-weightTrimBeta> ::= "0" | "RANDFLOAT(0,1)"
 
-<SMO> ::=
+<SMO> ::= <SMO-cost> <SMO-kernel> <SMO-filterType>
+<SMO-cost> ::= "RANDFLOAT(0.5,1.5)"
+<SMO-kernel> ::= <NormalizedPolyKernel> | <PolyKernel> | <Puk> | <RBF>
+<SMO-filterType> ::= "RANDINTEGER(0,2)"
 
-<VotedPerceptron> ::=
+<VotedPerceptron> ::= <VotedPerceptron-exponent> <VotedPerceptron-numIterations> <VotedPerceptron-maxK>
+<VotedPerceptron-exponent> ::= "RANDFLOAT(0.2,5)"
+<VotedPerceptron-numIterations> ::= "RANDINTEGER(1,10)"
+<VotedPerceptron-maxK> ::= "RANDINTEGER(5000,50000)"
 
-<IBk> ::=
+<IBk> ::= <IBk-meanSquare> <IBk-distanceWeighting> <IBk-KNN> <IBk-crossValidate>
+<IBk-meanSquare> ::= "TRUE" | "FALSE"
+<IBk-distanceWeighting> ::= "TRUE" | "FALSE"
+<IBk-KNN> ::= "RANDINTEGER(1,64)"
+<IBk-crossValidate> ::= "TRUE" | "FALSE"
 
-<KStar> ::=
+<KStar> ::= <KStar-globalBlend> <KStar-entropicAutoBlend> <KStar-missingMode>
+<KStar-globalBlend> ::= "RANDINTEGER(1,100)"
+<KStar-entropicAutoBlend> ::= "TRUE" | "FALSE"
+<KStar-missingMode> ::= "a" | "d" | "m" | "n"
 
-<DecisionTable> ::=
+<DecisionTable> ::= <DecisionTable-evaluationMeasure> <DecisionTable-useIBk> <DecisionTable-search> <DecisionTable-crossVal>
+<DecisionTable-evaluationMeasure> ::= "acc" | "rmse" | "mae" | "aux"
+<DecisionTable-useIBk> ::= "TRUE" | "FALSE"
+<DecisionTable-search> ::= <BestFirst> | <GreedyStepwise>
+<DecisionTable-crossVal> ::= "RANDINTEGER(1,4)"
 
-<JRip> ::=
+<JRip> ::= <JRip-checkErrorRate> <JRip-minNo> <JRip-optimizations> <JRip-usePruning>
+<JRip-checkErrorRate> ::= "TRUE" | "FALSE"
+<JRip-minNo> ::= "RANDINTEGER(1,5)"
+<JRip-optimizations> ::= "RANDINTEGER(1,5)"
+<JRip-usePruning> ::= "TRUE" | "FALSE"
 
-<OneR> ::=
+<OneR> ::= <OneR-minBucketSize>
+<OneR-minBucketSize> ::= "RANDINTEGER(1,32)"
 
-<PART> ::=
+<PART> ::= <PART-binarySplits> <PART-minNumObj> <PART-reducedErrorPruning>
+<PART-binarySplits> ::= "TRUE" | "FALSE"
+<PART-minNumObj> ::= "RANDINTEGER(1,64)"
+<PART-numFolds> ::= "RANDINTEGER(2,5)"
+<PART-reducedErrorPruning> ::= "TRUE" <PART-numFolds> | "FALSE"
 
 <ZeroR> ::=
 
@@ -81,28 +130,58 @@
 <RandomTree-allowUnclassifiedInstances> ::= "TRUE" | "FALSE"
 <RandomTree-maxDepth> ::= "0" | "RANDINTEGER(2,20)"
 
-<REPTree> ::=
+<REPTree> ::= <REPTree-maxDepth> <REPTree-minNum> <REPTree-noPruning> <REPTree-minVarianceDrop>
+<REPTree-maxDepth> ::= "-1" | "RANDINTEGER(2,20)"
+<REPTree-minNum> ::= "RANDINTEGER(1,64)"
+<REPTree-noPruning> ::= "TRUE" | "FALSE"
+<REPTree-minVarianceDrop> ::= "RANDFLOAT(1E-5,1E-1)"
 
-<LWL> ::=
+<LWL> ::= <LWL-KNN> <LWL-weightingKernel>
+<LWL-KNN> ::= "-1" | "10" | "30" | "60" | "90" | "120"
+<LWL-weightingKernel> ::= "RANDINTEGER(0,4)"
 
-<AdaBoostM1> ::=
+<AdaBoostM1> ::= <AdaBoostM1-numIterations> <AdaBoostM1-weightThreshold> <AdaBoostM1-useResampling>
+<AdaBoostM1-numIterations> ::= "RANDINTEGER(2,128)"
+<AdaBoostM1-weightThreshold> ::= "100" | "RANDINTEGER(50,100)"
+<AdaBoostM1-useResampling> ::= "TRUE" | "FALSE"
 
-<Bagging> ::=
+<Bagging> ::= <Bagging-numIterations> <Bagging-bagSizePercent>
+<Bagging-numIterations> ::= "RANDINTEGER(2,128)"
+<Bagging-calcOutBag> ::= "TRUE" | "FALSE"
+<Bagging-bagSizePercent> ::= "RANDINTEGER(10,100)" | "100" <Bagging-calcOutBag>
 
-<RandomCommittee> ::=
+<RandomComittee> ::= <RandomComittee-numIterations>
+<RandomComittee-numIterations> ::= "RANDINTEGER(2,64)"
 
-<RandomSubSpace> ::=
+<RandomSubSpace> ::= <RandomSubSpace-numIterations> <RandomSubSpace-subSpaceSize>
+<RandomSubSpace-numIterations> ::= "RANDINTEGER(2,64)"
+<RandomSubSpace-subSpaceSize> ::= "RANDFLOAT(0.1,1)"
 
-<CfsSubsetEval> ::=
+<CfsSubsetEval> ::= <CfsSubsetEval-locallyPredictive> <CfsSubsetEval-missingSeparate>
+<CfsSubsetEval-locallyPredictive> ::= "TRUE" | "FALSE"
+<CfsSubsetEval-missingSeparate> ::= "TRUE" | "FALSE"
 
-<BestFirst> ::=
+<BestFirst> ::= <BestFirst-direction> <BestFirst-searchTerminator>
+<BestFirst-direction> ::= "RANDINTEGER(0,2)"
+<BestFirst-searchTerminator> ::= "RANDINTEGER(2,10)"
 
-<GreedyStepwise> ::=
+<GreedyStepwise> ::= <GreedyStepwise-searchBackwards> <GreedyStepwise-conservativeForwardSelection> <GreedyStepwise-generateRanking>
+<GreedyStepwise-searchBackwards> ::= "TRUE" | "FALSE"
+<GreedyStepwise-conservativeForwardSelection> ::= "TRUE" | "FALSE"
+<GreedyStepwise-numToSelect> ::= "RANDINTEGER(10,1000)"
+<GreedyStepwise-generateRanking> ::= "TRUE" | "FALSE" <GreedyStepwise-numToSelect>
 
-<NormalizedPolyKernel> ::=
+<NormalizedPolyKernel> ::= <NormalizedPolyKernel-exponent> <NormalizedPolyKernel-useLowerOrder>
+<NormalizedPolyKernel-exponent> ::= "RANDFLOAT(0.2,5)"
+<NormalizedPolyKernel-useLowerOrder> ::= "TRUE" | "FALSE"
 
-<PolyKernel> ::=
+<PolyKernel> ::= <PolyKernel-exponent> <PolyKernel-useLowerOrder>
+<PolyKernel-exponent> ::= "RANDFLOAT(0.2,5)"
+<PolyKernel-useLowerOrder> ::= "TRUE" | "FALSE"
 
-<Puk> ::=
+<Puk> ::= <Puk-omega> <Puk-sigma>
+<Puk-omega> ::= "RANDFLOAT(0.1,1)"
+<Puk-sigma> ::= "RANDFLOAT(0.1,10)"
 
-<RBF> ::=
+<RBF> ::= <RBF-gamma>
+<RBF-gamma> ::= "RANDFLOAT(1E-4,1)"
